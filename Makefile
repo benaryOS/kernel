@@ -1,4 +1,4 @@
-SRCS = $(shell find . -name '*.[cS]')
+SRCS = $(shell find . -name '*.[cs]')
 OBJS = $(addsuffix .o,$(basename $(SRCS)))
 
 AS = as
@@ -19,7 +19,7 @@ build/kernel: build $(OBJS)
 build:
 	@mkdir -p build
 
-%.o: %.S
+%.o: %.s
 	$(AS) $(ASFLAGS) -c -o $@ $^
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $^
