@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.4)
 
 project (BENARYOS C ASM)
 
-file(GLOB_RECURSE files ${BENARYOS_SOURCE_DIR}/src/*.c ${BENARYOS_SOURCE_DIR}/src/*.s) 
+file(GLOB_RECURSE files ${BENARYOS_SOURCE_DIR}/src/*.c ${BENARYOS_SOURCE_DIR}/src/*.S) 
 
 include_directories(${BENARYOS_SOURCE_DIR}/src/) 
 
