@@ -1,4 +1,4 @@
-SRCS = $(shell find . -name '*.[cs]')
+SRCS = $(shell find . -name '*.[cS]')
 OBJS = $(addsuffix .o,$(basename $(SRCS)))
 
 AS = as
