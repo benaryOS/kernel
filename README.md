@@ -8,14 +8,12 @@ It began as a rewrite of benarydingOS.
 
 ## Building it
 
-benaryOS is using cmake:
+benaryOS is using `make`:
 
-	$ mkdir build
-	$ cd build
-	$ cmake ..
 	$ make
 
-This will create a `kernel` file, you can then boot from.
+This will create a `kernel` file, in a `build`
+directory, you can then boot from.
 
 ## Booting it
 
