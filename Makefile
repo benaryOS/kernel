@@ -5,7 +5,7 @@ AS = as
 CC = cc
 LD = ld
 
-ASFLAGS	= --32
+ASFLAGS	= -m32
 CFLAGS	= -m32 -Werror -Wall -g -fno-stack-protector -nostdinc -std=gnu89 -Isrc
 LDFLAGS	= -melf_i386 -Tsrc/linker.ld
 
