@@ -6,7 +6,7 @@ extern void halt(void);
 struct cpu_state *int_exception_handler(struct cpu_state *cpu)
 {
 	switch(cpu->intr)
-    {
+	{
 		case 0x00:
 			printk("#DE - Division by Zero\n");
 			break;
