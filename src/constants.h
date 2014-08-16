@@ -15,4 +15,9 @@ typedef __builtin_va_list       va_list;
 #define TEXT_BUFFER ((char *)0xb8000)
 
 
+/*
+	typedefs
+*/
+typedef unsigned int size_t;
+
 #endif /** __BENARYOS_CONSTANTS__ **/
