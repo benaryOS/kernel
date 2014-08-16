@@ -49,6 +49,7 @@ int printk(const char *format,...)
 					case 'c':
 						putchar(va_arg(args,int));
 						len++;
+						break;
 					case '%':
 						putchar('%');
 						len++;
