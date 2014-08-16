@@ -4,7 +4,7 @@ extern void *memcpy(void *,const void *,size_t);
 extern void outb(uint16_t,uint8_t);
 
 size_t text_pos=0;
-char text_color=0x0a;
+static char text_color=0x0a;
 
 void update_cursor_pos(void)
 {

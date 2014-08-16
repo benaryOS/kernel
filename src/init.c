@@ -4,7 +4,9 @@ extern int printk(const char *,...);
 extern int putchar(int);
 extern size_t text_pos;
 
-extern void init_gdt(void);
+extern void gdt_init(void);
+extern void pic_init(void);
+extern void idt_init(void);
 
 void init(void)
 {
@@ -18,6 +20,15 @@ void init(void)
 	printk("benaryOS booted\n");
 
 	printk("loading GDT\n");
-	init_gdt();
+	gdt_init();
+
+	printk("initialise PIC\n");
+	pic_init();
+
+	printk("initialise IDT\n");
+	idt_init();
+
+	asm volatile("sti");
+
 	while(1);
 }
