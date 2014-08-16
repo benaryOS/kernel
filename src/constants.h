@@ -22,4 +22,14 @@ typedef __builtin_va_list       va_list;
 */
 typedef unsigned int size_t;
 
+typedef signed char int_8t;
+typedef signed short int int_16t;
+typedef signed long int int_32t;
+typedef signed long long int int_64t;
+
+typedef unsigned int8_t uint8_t;
+typedef unsigned int16_t uint16_t;
+typedef unsigned int32_t uint32_t;
+typedef unsigned int64_t uint64_t;
+
 #endif /** __BENARYOS_CONSTANTS__ **/
