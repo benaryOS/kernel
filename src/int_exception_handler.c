@@ -40,9 +40,15 @@ struct cpu_state *int_exception_handler(struct cpu_state *cpu)
 			printk("Coprocessor Segment Overrun");
 			halt();
 			break;
-		case 0x0a:printk("#TS - Invalid TSS\n");break;
-		case 0x0b:printk("#NP - Segment not Present\n");break;
-		case 0x0c:printk("#SS - Stack Fault\n");break;
+		case 0x0a:
+			printk("#TS - Invalid TSS\n");
+			break;
+		case 0x0b:
+			printk("#NP - Segment not Present\n");
+			break;
+		case 0x0c:
+			printk("#SS - Stack Fault\n");
+			break;
 		case 0x0d:
 			printk("#GP - General Protection Fault\nError Code: %d\n",(int)cpu->error);
 			halt();
