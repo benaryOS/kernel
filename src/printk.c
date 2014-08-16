@@ -18,8 +18,8 @@ size_t printint(int i)
 	int j;
 	for(j=0;i;i/=10)
 	{
-		j+=i%10;
 		j*=10;
+		j+=i%10;
 	}
 	for(i=0;j;i++)
 	{
