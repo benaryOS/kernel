@@ -6,6 +6,7 @@ extern size_t text_pos;
 
 extern void gdt_init(void);
 extern void pic_init(void);
+extern void idt_init(void);
 
 void init(void)
 {
@@ -23,6 +24,11 @@ void init(void)
 
 	printk("initialise PIC\n");
 	pic_init();
+
+	printk("initialise IDT\n");
+	idt_init();
+
+	asm volatile("sti");
 
 	while(1);
 }
