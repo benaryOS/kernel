@@ -8,11 +8,12 @@ size_t printint(int i)
 	if(!i)
 	{
 		putchar('0');
+		return 1;
 	}
 	if(i<0)
 	{
 		putchar('-');
-		i*=-1;
+		return printint(-i)+1;
 	}
 	int j;
 	for(j=0;i;i/=10)
