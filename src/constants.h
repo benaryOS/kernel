@@ -16,6 +16,22 @@ typedef __builtin_va_list       va_list;
 #define TEXT_WIDTH 80
 #define TEXT_HEIGHT 25
 
+/*
+	GDT flags
+*/
+#define GDT_FLAG_DATASEG	0x02
+#define GDT_FLAG_CODESEG	0x0a
+#define GDT_FLAG_TSS		0x09
+ 
+#define GDT_FLAG_SEGMENT	0x10
+#define GDT_FLAG_RING0		0x00
+#define GDT_FLAG_RING3		0x60
+#define GDT_FLAG_PRESENT	0x80
+
+#define GDT_FLAG_4K_GRAN	0x800
+#define GDT_FLAG_32_BIT		0x400
+
+#define GDT_SIZE			0x08
 
 /*
 	typedefs
@@ -27,9 +43,9 @@ typedef signed short int int_16t;
 typedef signed long int int_32t;
 typedef signed long long int int_64t;
 
-typedef unsigned int8_t uint8_t;
-typedef unsigned int16_t uint16_t;
-typedef unsigned int32_t uint32_t;
-typedef unsigned int64_t uint64_t;
+typedef unsigned char uint_8t;
+typedef unsigned short int uint_16t;
+typedef unsigned long int uint_32t;
+typedef unsigned long long int uint_64t;
 
 #endif /** __BENARYOS_CONSTANTS__ **/
