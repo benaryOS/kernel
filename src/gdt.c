@@ -43,7 +43,7 @@ void reload_gdt(void)
 	);
 }
 
-void init_gdt(void)
+void gdt_init(void)
 {
 	//sorry, this is against ever (EVERY) coding standard (at most against the 80 char lines) but it is only readable when not split into multiple lines. sorry.
 	gdt_entry(0,0,0,0);
