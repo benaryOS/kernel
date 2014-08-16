@@ -20,7 +20,7 @@ void init(struct multiboot *mb)
 	printk("benaryOS booted");
 	if(mb->mbs_cmdline)
 	{
-		printk(" with cmdline %s",(char *)mb->mbs_cmdline);
+		printk(" with cmdline \"%s\"",(char *)mb->mbs_cmdline);
 	}
 	putchar('\n');
 
