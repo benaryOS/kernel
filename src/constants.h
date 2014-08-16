@@ -13,6 +13,8 @@ typedef __builtin_va_list       va_list;
 	buffers (text and later video buffer)
 */
 #define TEXT_BUFFER ((char *)0xb8000)
+#define TEXT_WIDTH 80
+#define TEXT_HEIGHT 25
 
 
 /*
