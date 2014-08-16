@@ -32,7 +32,7 @@ int putchar(int ch)
 	}
 	if(text_pos>=TEXT_WIDTH*TEXT_HEIGHT)
 	{
-		memcpy(TEXT_BUFFER,TEXT_BUFFER,TEXT_WIDTH*(TEXT_HEIGHT-1));
+		memcpy(TEXT_BUFFER,TEXT_BUFFER+(TEXT_WIDTH*2),TEXT_WIDTH*(TEXT_HEIGHT-1)*2);
 		text_pos=TEXT_WIDTH*(TEXT_HEIGHT-1);
 	}
 
