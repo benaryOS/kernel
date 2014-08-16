@@ -2,6 +2,21 @@
 #define __BENARYOS_CONSTANTS__
 
 /*
+	typedefs
+*/
+typedef unsigned int size_t;
+
+typedef signed char int8_t;
+typedef signed short int int16_t;
+typedef signed long int int32_t;
+typedef signed long long int int64_t;
+
+typedef unsigned char uint8_t;
+typedef unsigned short int uint16_t;
+typedef unsigned long int uint32_t;
+typedef unsigned long long int uint64_t;
+
+/*
 	va_args
 */
 typedef __builtin_va_list       va_list;
@@ -17,7 +32,7 @@ typedef __builtin_va_list       va_list;
 #define TEXT_HEIGHT 25
 
 /*
-	GDT flags
+	GDT
 */
 #define GDT_FLAG_DATASEG	0x02
 #define GDT_FLAG_CODESEG	0x0a
@@ -34,18 +49,21 @@ typedef __builtin_va_list       va_list;
 #define GDT_SIZE			0x08
 
 /*
-	typedefs
+	IDT
 */
-typedef unsigned int size_t;
+#define IDT_SIZE			256
 
-typedef signed char int8_t;
-typedef signed short int int16_t;
-typedef signed long int int32_t;
-typedef signed long long int int64_t;
+#define IDT_TASK_GATE		0x9
+#define IDT_INTERRUPT_GATE	0xe
+#define IDT_TRAP_GATE		0xf
 
-typedef unsigned char uint8_t;
-typedef unsigned short int uint16_t;
-typedef unsigned long int uint32_t;
-typedef unsigned long long int uint64_t;
+struct idt_desc
+{
+	uint16_t lsb_handler;
+	uint16_t selector;
+	uint8_t reserved;
+	uint8_t access;
+	uint16_t msb_handler;
+};
 
 #endif /** __BENARYOS_CONSTANTS__ **/

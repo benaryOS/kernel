@@ -3,7 +3,7 @@
 extern void *memcpy(void *,const void *,size_t);
 
 size_t text_pos=0;
-char text_color=0x0a;
+static char text_color=0x0a;
 
 int putchar(int ch)
 {

@@ -1,6 +1,6 @@
 #include <constants.h>
 
-uint64_t gdt[GDT_SIZE];
+static uint64_t gdt[GDT_SIZE]={};
 
 //basically stolen from benaryOS which stole it from lowlevel.eu (=tyndur)
 //benaryorg is a real thief!
