@@ -90,4 +90,34 @@ struct cpu_state
 	uint32_t ss; 
 };
 
+/*
+	multiboot structure
+*/
+
+struct multiboot
+{
+	uint32_t mbs_flags;
+	uint32_t mbs_mem_lower;
+	uint32_t mbs_mem_upper;
+	uint32_t mbs_bootdevice;
+	uint32_t mbs_cmdline;
+	uint32_t mbs_mods_count;
+	uint32_t mbs_mods_addr;
+	uint64_t mbs_syms1;
+	uint64_t mbs_syms2;
+	uint32_t mbs_mmap_length;
+	uint32_t mbs_mmap_addr;
+	uint32_t mbs_drives_length;
+	uint32_t mbs_drives_addr;
+	uint32_t mbs_config_table;
+	uint32_t mbs_boot_loader_name;
+	uint32_t mbs_apm_table;
+	uint32_t mbs_vbe_control_info;
+	uint32_t mbs_vbe_mode_info;
+	uint16_t mbs_vbe_mode;
+	uint16_t mbs_vbe_interface_seg;
+	uint16_t mbs_vbe_interface_off;
+	uint16_t mbs_vbe_interface_len;
+};
+
 #endif /** __BENARYOS_CONSTANTS__ **/
