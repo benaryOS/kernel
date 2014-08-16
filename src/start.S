@@ -1,13 +1,10 @@
-//begin of the executable code
-.section .text
-
-//the C function
-.extern init
-
 //multiboot header defines
 #define MB_MAGIC 0x1badb002
 #define MB_FLAGS 0x0
 #define MB_CHECKSUM -(MB_MAGIC+MB_FLAGS)
+
+//first place the multiboot header (for grub)
+.section multiboot
 
 //align everything
 .align 4
@@ -15,6 +12,12 @@
 .int MB_MAGIC
 .int MB_FLAGS
 .int MB_CHECKSUM
+
+//begin of the executable code
+.section .text
+
+//the C function
+.extern init
 
 //define the function that will be called on boot
 .global _start
