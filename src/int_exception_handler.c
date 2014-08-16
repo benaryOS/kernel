@@ -9,6 +9,7 @@ struct cpu_state *int_exception_handler(struct cpu_state *cpu)
 	{
 		case 0x00:
 			printk("#DE - Division by Zero\n");
+			cpu->eip++;
 			break;
 		case 0x01:
 			printk("#DB - Debug\n");
