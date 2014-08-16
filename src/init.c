@@ -13,5 +13,5 @@ void init(void)
 	}
 	text_pos=0;
 	
-	printk("benaryOS booted!\n");
+	printk("benaryOS booted!\n%c\n%d\n",'b',1234);
 }
