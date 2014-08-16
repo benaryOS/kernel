@@ -5,7 +5,6 @@ extern void halt(void);
 
 struct cpu_state *int_exception_handler(struct cpu_state *cpu)
 {
-	//if you cant see it, it isn't there, so look away! quick!
 	switch(cpu->intr)
     {
 		case 0x00:
