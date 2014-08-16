@@ -28,7 +28,8 @@ void init(void)
 	printk("initialise IDT\n");
 	idt_init();
 
-	asm volatile("sti");
+	//asm volatile("sti");
 
+	printk("benaryOS running\n");
 	while(1);
 }
