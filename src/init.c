@@ -7,6 +7,7 @@ extern size_t text_pos;
 extern void gdt_init(void);
 extern void pic_init(void);
 extern void idt_init(void);
+extern void pmm_init(struct multiboot *);
 
 void init(struct multiboot *mb)
 {
@@ -32,6 +33,9 @@ void init(struct multiboot *mb)
 
 	printk("initialise IDT\n");
 	idt_init();
+
+	printk("initialise PMM\n");
+	pmm_init(mb);
 
 	//asm volatile("sti");
 
