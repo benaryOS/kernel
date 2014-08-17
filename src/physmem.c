@@ -2,6 +2,8 @@
 
 static uint32_t bitmap[PMM_BITMAP_SIZE]={};
 
+extern const void KERNEL_START,KERNEL_END;
+
 void pmm_free(void *addr)
 {
 	uint32_t a=(uint32_t)addr;
@@ -27,7 +29,9 @@ void *pmm_alloc_block(void)
 			{
 				if((bitmap[i]>>j)&0x01)
 				{
-					return (void *)((i*32+j)*4096);
+					void *addr=(void *)((i*32+j)*4096);
+					pmm_use(addr);
+					return addr;
 				}
 			}
 		}
@@ -52,5 +56,10 @@ void pmm_init(struct multiboot *mb)
 			}
 		}
 		mmap++;
+	}
+	int *addr;
+	for(addr=(int *)&KERNEL_START;addr<(int *)&KERNEL_END;addr+=0x1000)
+	{
+		pmm_use((void *)addr);
 	}
 }
