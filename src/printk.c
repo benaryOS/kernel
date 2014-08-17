@@ -45,18 +45,36 @@ int printk(const char *format,...)
 				switch(format[i])
 				{
 					case 'd':
+					{
 						len+=printint(va_arg(args,int));
 						break;
+					}
 					case 'c':
+					{
 						putchar(va_arg(args,int));
 						len++;
 						break;
+					}
+					case 's':
+					{
+						int j;
+						char *str=va_arg(args,char *);
+						for(j=0;j<strlen(str);j++,len++)
+						{
+							putchar(str[j]);
+						}
+						break;
+					}
 					case '%':
+					{
 						putchar('%');
 						len++;
 						break;
+					}
 					default:
+					{
 						continue;
+					}
 				}
 				break;
 			default:

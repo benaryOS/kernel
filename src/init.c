@@ -8,7 +8,7 @@ extern void gdt_init(void);
 extern void pic_init(void);
 extern void idt_init(void);
 
-void init(void)
+void init(struct multiboot *mb)
 {
 	size_t i;
 	for(i=0;i<TEXT_HEIGHT*TEXT_WIDTH;i++)
@@ -17,7 +17,12 @@ void init(void)
 	}
 	text_pos=0;
 	
-	printk("benaryOS booted\n");
+	printk("benaryOS booted");
+	if(mb->mbs_cmdline)
+	{
+		printk(" with cmdline \"%s\"",(char *)mb->mbs_cmdline);
+	}
+	putchar('\n');
 
 	printk("loading GDT\n");
 	gdt_init();

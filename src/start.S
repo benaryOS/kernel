@@ -25,6 +25,9 @@ _start:
 	//set the stack pointer to the stack
 	mov $kernel_stack, %esp
 
+	//throw the multiboot structure on the stack
+	push %ebx
+
 	//call init <- i love those comments
 	call init
 
