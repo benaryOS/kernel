@@ -106,7 +106,13 @@ struct multiboot
 	uint64_t mbs_syms1;
 	uint64_t mbs_syms2;
 	uint32_t mbs_mmap_length;
-	uint32_t mbs_mmap_addr;
+	struct multiboot_mmap
+	{
+		uint32_t size;
+		uint64_t base;
+		uint64_t length;
+		uint32_t type;
+	} *mbs_mmap_addr;
 	uint32_t mbs_drives_length;
 	uint32_t mbs_drives_addr;
 	uint32_t mbs_config_table;
