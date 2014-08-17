@@ -60,7 +60,7 @@ typedef __builtin_va_list       va_list;
 /*
 	PMM
 */
-#define PMM_BITMAP_SIZE ((4*1024*1024*1024)/4096/32)
+#define PMM_BITMAP_SIZE ((1024*1024)/32)
 
 struct idt_desc
 {
