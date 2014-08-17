@@ -57,6 +57,11 @@ typedef __builtin_va_list       va_list;
 #define IDT_INTERRUPT_GATE	0xe
 #define IDT_TRAP_GATE		0xf
 
+/*
+	PMM
+*/
+#define PMM_BITMAP_SIZE ((4*1024*1024*1024)/4096/32)
+
 struct idt_desc
 {
 	uint16_t lsb_handler;
