@@ -7,6 +7,8 @@ SECTIONS
 	/* ELFs (are executables, our kernel is one too) are loaded to 1MB) */
 	. = 0x100000;
 
+	KERNEL_START = .;
+
 	/* section .text (executable code) comes first */
 	.text : {
 		/* multiboot first (for grub) */
@@ -28,4 +30,6 @@ SECTIONS
 	.bss ALIGN(4096) : {
 		*(.bss)
 	}
+
+	KERNEL_END = .;
 }
