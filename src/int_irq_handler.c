@@ -12,7 +12,6 @@ struct cpu_state *int_irq_handler(struct cpu_state *cpu)
 	{
 		case 0x00:
 			cpu=schedule(cpu);
-			printk("timer\n");
 			break;
 		case 0x01:
 			printk("keyboard\n");
