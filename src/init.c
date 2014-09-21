@@ -25,6 +25,9 @@ void init(struct multiboot *mb)
 	}
 	putchar('\n');
 
+	printk("initialise PMM\n");
+	pmm_init(mb);
+
 	printk("loading GDT\n");
 	gdt_init();
 
@@ -33,9 +36,6 @@ void init(struct multiboot *mb)
 
 	printk("initialise IDT\n");
 	idt_init();
-
-	printk("initialise PMM\n");
-	pmm_init(mb);
 
 	asm volatile("sti");
 
