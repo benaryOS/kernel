@@ -31,7 +31,7 @@ _start:
 	//call init <- i love those comments
 	call init
 
-	//if the init should return (e.g. kernel panic)
+	//if the init should return (e.g. should NEVER happen)
 _stop:
 	//stop interrupts
 	cli
@@ -113,15 +113,19 @@ intr_common_handler:
 	push %ebx
 	push %eax
 
+	//load kernel data-segments
 	mov $0x10, %ax
 	mov %ax, %ds
 	mov %ax, %es
 
-	//call our C function
+	//throw our stack pointer (where the saved registers are) on the stack
 	push %esp
+	//call our C function
 	call int_handler
+	//restore the stack (and cpu_state) our handler returned
 	mov %eax, %esp
 
+	//load user data-segments
 	mov $0x23, %ax
 	mov %ax, %ds
 	mov %ax, %es
@@ -145,5 +149,5 @@ intr_common_handler:
 .section .bss
 //leave a 8192kb(?) gap
 .space 8192
-//`kernel_stack` will get a pointer (used a few lines up)
+//`kernel_stack` will become a pointer (used a few lines up)
 kernel_stack:
