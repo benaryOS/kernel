@@ -46,7 +46,7 @@ typedef __builtin_va_list       va_list;
 #define GDT_FLAG_4K_GRAN	0x800
 #define GDT_FLAG_32_BIT		0x400
 
-#define GDT_SIZE			0x08
+#define GDT_SIZE			0x05
 
 /*
 	IDT
