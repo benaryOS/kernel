@@ -96,7 +96,12 @@ struct cpu_state
 /*
 	tasks
 */
-//coming soon
+struct task
+{
+	struct task *next;
+	uint32_t pid;
+	struct cpu_state *cpu;
+};
 
 /*
 	PIDs
