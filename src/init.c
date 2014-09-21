@@ -6,6 +6,7 @@ extern size_t text_pos;
 
 extern void gdt_init(void);
 extern void pic_init(void);
+extern void pit_init(int);
 extern void idt_init(void);
 extern void pmm_init(struct multiboot *);
 
@@ -30,6 +31,9 @@ void init(struct multiboot *mb)
 
 	printk("loading GDT\n");
 	gdt_init();
+
+	printk("initialise PIT\n");
+	pit_init(100);
 
 	printk("initialise PIC\n");
 	pic_init();
