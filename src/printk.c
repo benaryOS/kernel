@@ -15,13 +15,13 @@ size_t printint(int i)
 		putchar('-');
 		return printint(-i)+1;
 	}
-	int j;
-	for(j=0;i;i/=10)
+	int j,k;
+	for(k=j=0;i;i/=10,k++)
 	{
 		j*=10;
 		j+=i%10;
 	}
-	for(i=0;j;i++)
+	for(i=0;i<k;i++)
 	{
 		putchar('0'+(j%10));
 		j/=10;
