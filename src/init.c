@@ -4,6 +4,8 @@ extern int printk(const char *,...);
 extern int putchar(int);
 extern size_t text_pos;
 
+extern void modules_init(struct multiboot *);
+
 extern void gdt_init(void);
 extern void pic_init(void);
 extern void pit_init(int);
@@ -48,6 +50,9 @@ void init(struct multiboot *mb)
 
 	printk("initialise PMM\n");
 	pmm_init(mb);
+
+	printk("loading modules\n");
+	modules_init(mb);
 
 	printk("loading GDT\n");
 	gdt_init();
