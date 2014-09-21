@@ -2,6 +2,8 @@
 
 extern int printk(const char *format,...);
 
+extern struct cpu_state *schedule(struct cpu_state *);
+
 extern struct task *current_task;
 
 struct cpu_state *int_irq_handler(struct cpu_state *cpu)
@@ -9,6 +11,7 @@ struct cpu_state *int_irq_handler(struct cpu_state *cpu)
 	switch(cpu->intr-0x20)
 	{
 		case 0x00:
+			cpu=schedule(cpu);
 			printk("timer\n");
 			break;
 		case 0x01:
