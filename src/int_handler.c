@@ -34,11 +34,11 @@ struct cpu_state *int_handler(struct cpu_state *cpu)
 	//send end of interrupt (hardware interrupts)
 	if(intr>=0x20&&intr<=0x2f)
 	{
-		if(intr>=0x28)
+		if(intr<0x29)
 		{
-			outb(0xa0,0x20);
+			outb(0x20,0x20);
 		}
-		outb(0x20,0x20);
+		outb(0xa0,0x20);
 	}
 
 	return cpu;
