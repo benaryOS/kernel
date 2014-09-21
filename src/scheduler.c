@@ -4,6 +4,8 @@ extern size_t printk(const char *,...);
 
 extern void tss_entry_set(uint32_t,uint32_t);
 
+extern void halt(void);
+
 static struct task *current_task=0;
 static struct task *first_task=0;
 
@@ -41,6 +43,7 @@ struct cpu_state *schedule(struct cpu_state *cpu)
 		else
 		{
 			printk("no tasks\n");
+			halt();
 		}
 	}
 	tss_entry_set(1,(uint32_t)cpu);
