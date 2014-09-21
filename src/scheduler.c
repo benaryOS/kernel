@@ -29,7 +29,7 @@ struct cpu_state *schedule(struct cpu_state *cpu)
 	{
 		current_task->cpu=cpu;
 		current_task=current_task->next;
-		printk("switching to %d\n",current_task->pid);
+		//printk("switching to %d\n",current_task->pid);
 		cpu=current_task->cpu;
 	}
 	else
@@ -38,7 +38,7 @@ struct cpu_state *schedule(struct cpu_state *cpu)
 		{
 			current_task=first_task;
 			cpu=current_task->cpu;
-			printk("starting first task\n");
+			//printk("starting first task\n");
 		}
 		else
 		{
