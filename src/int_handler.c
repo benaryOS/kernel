@@ -4,28 +4,42 @@ extern int printk(const char *,...);
 extern void outb(uint16_t,uint8_t);
 
 extern struct cpu_state *int_exception_handler(struct cpu_state *);
+extern struct cpu_state *int_irq_handler(struct cpu_state *);
+
+struct cpu_state *int_unknown_handler(struct cpu_state *cpu)
+{
+	printk("interrupt(%d)\n",cpu->intr);
+	return cpu;
+}
 
 struct cpu_state *int_handler(struct cpu_state *cpu)
 {
-	struct cpu_state *oldcpu=cpu;
-	if(cpu->intr>=0x00&&cpu->intr<0x20)
+	int intr=cpu->intr;
+	struct cpu_state *(*f)(struct cpu_state *)=0;
+	if(intr>=0x00&&intr<0x20)
 	{
-		cpu=int_exception_handler(cpu);
+		f=int_exception_handler;
 	}
-	else
+	if(intr>=0x20&&intr<0x30)
 	{
-		printk("interrupt(%d)\n",cpu->intr);
+		f=int_irq_handler;
 	}
+	if(!f)
+	{
+		f=int_unknown_handler;
+	}
+
+	cpu=f(cpu);
+
 	//send end of interrupt (hardware interrupts)
-	if(oldcpu->intr>=0x20&&oldcpu->intr<=0x2f)
+	if(intr>=0x20&&intr<=0x2f)
 	{
-		if(oldcpu->intr>=0x28)
+		if(intr>=0x28)
 		{
 			outb(0xa0,0x20);
 		}
 		outb(0x20,0x20);
 	}
 
-	//while(1);
 	return cpu;
 }
