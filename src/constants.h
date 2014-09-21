@@ -125,7 +125,7 @@ struct multiboot
 		void *end;
 		void *name;
 		void *reserved;
-	}
+	} *mbs_mods_addr;
 	uint64_t mbs_syms1;
 	uint64_t mbs_syms2;
 	uint32_t mbs_mmap_length;
