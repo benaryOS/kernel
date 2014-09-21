@@ -36,6 +36,7 @@ struct cpu_state *schedule(struct cpu_state *cpu)
 		{
 			current_task=first_task;
 			cpu=current_task->cpu;
+			printk("starting first task\n");
 		}
 		else
 		{
