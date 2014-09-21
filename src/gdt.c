@@ -1,5 +1,17 @@
 #include <constants.h>
 
+static uint32_t tss[32]={0,0,0x10};
+
+void tss_entry_set(uint32_t i,uint32_t val)
+{
+	tss[i]=val;
+}
+
+uint32_t tss_entry_get(uint32_t i)
+{
+	return tss[i];
+}
+
 static uint64_t gdt[GDT_SIZE]={};
 
 //basically stolen from benaryOS which stole it from lowlevel.eu (=tyndur)
@@ -51,7 +63,11 @@ void gdt_init(void)
 	gdt_entry(2,0,0xfffff,GDT_FLAG_SEGMENT|GDT_FLAG_32_BIT|GDT_FLAG_DATASEG|GDT_FLAG_4K_GRAN|GDT_FLAG_PRESENT);
 	gdt_entry(3,0,0xfffff,GDT_FLAG_SEGMENT|GDT_FLAG_32_BIT|GDT_FLAG_CODESEG|GDT_FLAG_4K_GRAN|GDT_FLAG_PRESENT|GDT_FLAG_RING3);
 	gdt_entry(4,0,0xfffff,GDT_FLAG_SEGMENT|GDT_FLAG_32_BIT|GDT_FLAG_DATASEG|GDT_FLAG_4K_GRAN|GDT_FLAG_PRESENT|GDT_FLAG_RING3);
+	gdt_entry(5,(uint32_t)tss,sizeof(tss),GDT_FLAG_TSS|GDT_FLAG_PRESENT|GDT_FLAG_RING3);
 
 	reload_gdt();
+
+	//load tss
+	 asm volatile("ltr %%ax" : : "a" (5 << 3));
 }
 
