@@ -74,7 +74,6 @@ struct idt_desc
 /*
 	interrupts
 */
-
 struct cpu_state
 {
 	uint32_t eax;
@@ -94,11 +93,19 @@ struct cpu_state
 	uint32_t esp;
 	uint32_t ss; 
 };
+/*
+	tasks
+*/
+//coming soon
+
+/*
+	PIDs
+*/
+#define PID_BITMAP_SIZE (128)
 
 /*
 	multiboot structure
 */
-
 struct multiboot
 {
 	uint32_t mbs_flags;
