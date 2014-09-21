@@ -37,7 +37,7 @@ void init(struct multiboot *mb)
 	printk("initialise PMM\n");
 	pmm_init(mb);
 
-	//asm volatile("sti");
+	asm volatile("sti");
 
 	printk("benaryOS running\n");
 	while(1);
