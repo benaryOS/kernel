@@ -36,7 +36,7 @@ void init(struct multiboot *mb)
 	printk("initialise PMM\n");
 	pmm_init(mb);
 
-	printk("loading modules\n");
+	printk("loading modules(%d)\n",mb->mbs_mods_count);
 	modules_init(mb);
 
 	printk("loading GDT\n");
