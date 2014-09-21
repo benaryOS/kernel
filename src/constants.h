@@ -119,7 +119,13 @@ struct multiboot
 	uint32_t mbs_bootdevice;
 	uint32_t mbs_cmdline;
 	uint32_t mbs_mods_count;
-	uint32_t mbs_mods_addr;
+	struct mb_module
+	{
+		void *start;
+		void *end;
+		void *name;
+		void *reserved;
+	}
 	uint64_t mbs_syms1;
 	uint64_t mbs_syms2;
 	uint32_t mbs_mmap_length;
