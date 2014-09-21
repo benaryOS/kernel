@@ -7,15 +7,15 @@ extern const void KERNEL_START,KERNEL_END;
 void pmm_free(void *addr)
 {
 	uint32_t a=(uint32_t)addr;
-	a/=4096;
-	bitmap[a/32]|=1<<(a%32);
+	a/=0x1000;
+	bitmap[a/0x20]|=1<<(a%0x20);
 }
 
 void pmm_use(void *addr)
 {
 	uint32_t a=(uint32_t)addr;
-	a/=4096;
-	bitmap[a/32]&=~(1<<(a%32));
+	a/=0x1000;
+	bitmap[a/0x20]&=~(1<<(a%0x20));
 }
 
 void *pmm_alloc_block(void)
@@ -25,11 +25,11 @@ void *pmm_alloc_block(void)
 	{
 		if(bitmap[i])
 		{
-			for(j=0;j<32;j++)
+			for(j=0;j<0x20;j++)
 			{
-				if((bitmap[i]>>j)&0x01)
+				if((bitmap[i])&(0x01<<j))
 				{
-					void *addr=(void *)((i*32+j)*4096);
+					void *addr=(void *)((i*0x20+j)*0x1000);
 					pmm_use(addr);
 					return addr;
 				}
