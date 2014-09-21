@@ -51,8 +51,9 @@ void init(struct multiboot *mb)
 	printk("initialise IDT\n");
 	idt_init();
 
+	printk("benaryOS running\n");
+	printk("starting first task now\n");
 	asm volatile("sti");
 
-	printk("benaryOS running\n");
-	while(1);
+	asm volatile("int $0x20");
 }

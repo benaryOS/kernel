@@ -149,4 +149,9 @@ struct multiboot
 	uint16_t mbs_vbe_interface_len;
 };
 
+/*
+	syscalls
+*/
+#define SYSCALL_PUTCHAR			0x0001
+
 #endif /** __BENARYOS_CONSTANTS__ **/

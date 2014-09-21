@@ -5,6 +5,7 @@ extern void outb(uint16_t,uint8_t);
 
 extern struct cpu_state *int_exception_handler(struct cpu_state *);
 extern struct cpu_state *int_irq_handler(struct cpu_state *);
+extern struct cpu_state *int_syscall_handler(struct cpu_state *);
 
 struct cpu_state *int_unknown_handler(struct cpu_state *cpu)
 {
@@ -23,6 +24,10 @@ struct cpu_state *int_handler(struct cpu_state *cpu)
 	if(intr>=0x20&&intr<0x30)
 	{
 		f=int_irq_handler;
+	}
+	if(intr==0x30)
+	{
+		f=int_syscall_handler;
 	}
 	if(!f)
 	{
