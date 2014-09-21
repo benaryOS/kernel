@@ -33,6 +33,12 @@ int putchar(int ch)
 	if(text_pos>=TEXT_WIDTH*TEXT_HEIGHT)
 	{
 		memcpy(TEXT_BUFFER,TEXT_BUFFER+(TEXT_WIDTH*2),TEXT_WIDTH*(TEXT_HEIGHT-1)*2);
+		size_t n;
+		for(n=0;n<TEXT_WIDTH;n++)
+		{
+			*(TEXT_BUFFER+TEXT_WIDTH*(TEXT_HEIGHT-1)*2+(n*2))=0;
+			*(TEXT_BUFFER+TEXT_WIDTH*(TEXT_HEIGHT-1)*2+(n*2+1))=text_color;
+		}
 		text_pos=TEXT_WIDTH*(TEXT_HEIGHT-1);
 	}
 
