@@ -45,7 +45,7 @@ void reload_gdt(void)
 
 void gdt_init(void)
 {
-	//sorry, this is against ever (EVERY) coding standard (at most against the 80 char lines) but it is only readable when not split into multiple lines. sorry.
+	//sorry, this is against every (EVERY) coding standard (at most against the 80 char lines) but it is only readable when not split into multiple lines. sorry.
 	gdt_entry(0,0,0,0);
 	gdt_entry(1,0,0xfffff,GDT_FLAG_SEGMENT|GDT_FLAG_32_BIT|GDT_FLAG_CODESEG|GDT_FLAG_4K_GRAN|GDT_FLAG_PRESENT);
 	gdt_entry(2,0,0xfffff,GDT_FLAG_SEGMENT|GDT_FLAG_32_BIT|GDT_FLAG_DATASEG|GDT_FLAG_4K_GRAN|GDT_FLAG_PRESENT);
