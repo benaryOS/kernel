@@ -72,6 +72,20 @@ struct idt_desc
 };
 
 /*
+	paging
+*/
+struct page_context
+{
+	struct page_directory
+	{
+		struct page
+		{
+			uint32_t entry[1024];
+		} *page[1024];
+	} directory;
+};
+
+/*
 	interrupts
 */
 struct cpu_state
@@ -93,6 +107,7 @@ struct cpu_state
 	uint32_t esp;
 	uint32_t ss; 
 };
+
 /*
 	tasks
 */

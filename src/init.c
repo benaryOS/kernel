@@ -5,7 +5,7 @@ extern int putchar(int);
 extern size_t text_pos;
 
 extern void modules_init(struct multiboot *);
-
+extern void paging_init(void);
 extern void gdt_init(void);
 extern void pic_init(void);
 extern void pit_init(int);
@@ -35,6 +35,9 @@ void init(struct multiboot *mb)
 
 	printk("initialise PMM\n");
 	pmm_init(mb);
+
+	printk("initialise Paging\n");
+	paging_init();
 
 	printk("loading modules(%d)\n",mb->mbs_mods_count);
 	modules_init(mb);
