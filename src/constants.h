@@ -169,7 +169,7 @@ struct multiboot
 /*
 	elfs
 */
-#define ELF_MAGIC 0x464C457F
+#define ELF_MAGIC (0x464C457F)
  
 struct elf_header
 {
