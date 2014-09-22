@@ -58,7 +58,7 @@ void pmm_init(struct multiboot *mb)
 		mmap++;
 	}
 	int *addr;
-	//start address should be ((int *)&KERNEL_START) later
+	//FIXME: start address should be ((int *)&KERNEL_START) later
 	for(addr=0;addr<(int *)&KERNEL_END;addr+=0x1000)
 	{
 		pmm_use((void *)addr);
