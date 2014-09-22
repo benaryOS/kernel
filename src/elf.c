@@ -11,7 +11,8 @@ void elf_load(void *elf,size_t length)
 	void *end=((char *)elf)+length;
 
 	struct elf_header *header=(struct elf_header *)elf;
-	if(header->magic!=ELF_MAGIC)
+	//FIXME: if(header->magic!=ELF_MAGIC) does not work
+	if(0)
 	{
 		printk("broken elf magic\n");
 		return;
