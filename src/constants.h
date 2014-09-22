@@ -76,17 +76,15 @@ struct idt_desc
 */
 
 #define PAGING_PT_PRESENT		0x01
-#define PAGING_PT_WRITE			0x01
+#define PAGING_PT_WRITE			0x02
+
+typedef uint32_t page_t;
+typedef page_t *page_table_t;
+typedef page_table_t *page_directory_t;
 
 struct page_context
 {
-	struct page_directory
-	{
-		struct page
-		{
-			uint32_t entry[1024];
-		} *page[1024];
-	} directory;
+	page_directory_t directory;
 };
 
 /*
