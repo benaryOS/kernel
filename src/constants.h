@@ -74,6 +74,10 @@ struct idt_desc
 /*
 	paging
 */
+
+#define PAGING_PT_PRESENT		0x01
+#define PAGING_PT_WRITE			0x01
+
 struct page_context
 {
 	struct page_directory
