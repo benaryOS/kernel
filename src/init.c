@@ -33,24 +33,31 @@ void init(struct multiboot *mb)
 	}
 	putchar('\n');
 
+	//Physical Memory Management
 	printk("initialise PMM\n");
 	pmm_init(mb);
 
+	//Paging
 	printk("initialise Paging\n");
 	paging_init();
 
+	//Modules
 	printk("loading modules(%d)\n",mb->mbs_mods_count);
 	modules_init(mb);
 
+	//Global Descriptor Table
 	printk("loading GDT\n");
 	gdt_init();
 
+	//Programmable Interrupt Timer
 	printk("initialise PIT\n");
 	pit_init(100);
 
+	//Programmable Interrupt Controller
 	printk("initialise PIC\n");
 	pic_init();
 
+	//Interrupt Descriptor Table
 	printk("initialise IDT\n");
 	idt_init();
 
@@ -58,5 +65,6 @@ void init(struct multiboot *mb)
 	printk("starting first task now\n");
 	asm volatile("sti");
 
+	//this will forget our thread
 	asm volatile("int $0x20");
 }
