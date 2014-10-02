@@ -11,7 +11,7 @@ static int active=0;
 
 void paging_context_activate(struct page_context *ctx)
 {
-	asm volatile("mov %0, %%cr3" : : "r" (ctx->directory));
+	asm volatile("mov %0, %%cr3" : : "r" (ctx->phys));
 }
 
 void page_map(struct page_context *ctx,void *virtp,void *physp,uint32_t flags)
@@ -78,7 +78,7 @@ void page_map_kernel(struct page_context *ctx)
 void paging_context_create(struct page_context *ctx)
 {
 	int i;
-	ctx->directory=pmm_alloc_block();
+	ctx->directory=ctx->phys=pmm_alloc_block();
 	for(i=0;i<0x400;i++)
 	{
 		ctx->directory[i]=0;
