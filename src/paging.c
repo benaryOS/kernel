@@ -1,10 +1,13 @@
 #include <constants.h>
 
 extern void *pmm_alloc_block(void);
+extern void *vmm_alloc_block(struct page_context *);
 
 extern size_t printk(const char *,...);
 
 static struct page_context *kernel_ctx;
+
+static int active=0;
 
 void paging_context_activate(struct page_context *ctx)
 {
@@ -13,29 +16,38 @@ void paging_context_activate(struct page_context *ctx)
 
 void page_map(struct page_context *ctx,void *virtp,void *physp,uint32_t flags)
 {
+	//convert to uint32_t for shifting
 	uint32_t virt=(uint32_t)virtp;
 	uint32_t phys=(uint32_t)physp;
 
+	//check if someone wants to add flags in the address or wants to map 0
 	if(((virt|phys)&0xfff)||!virt)
 	{
 		printk("bad pointers\n");
 		return;
 	}
 
+	//offset in the page directory
 	uint32_t pdoff=(virt>>22)%0x1000;
+	//offset in the page table
 	uint32_t ptoff=(virt>>12)%0x1000;
 
 	uint32_t i;
 
+	//get the directory
 	page_directory_t dir=ctx->directory;
 
+	//temporary var
 	i=(uint32_t)dir[pdoff];
+	//if the pagetable is not present
 	if(!(i&PAGING_PRESENT))
 	{
+		//allocate a new one
 		i=(uint32_t)pmm_alloc_block();
 		i|=PAGING_PRESENT|PAGING_WRITE;
 		dir[pdoff]=(page_table_t)i;
 	}
+	//TODO: we are accessing physical memory
 	page_table_t table=(page_table_t)(i&(~0xfff));
 
 	i=(uint32_t)table[ptoff];
@@ -56,8 +68,11 @@ void page_map_kernel(struct page_context *ctx)
 	size_t i;
 	for(i=0x1000;i<0x400000;i+=0x1000)
 	{
+		//FIXME: no user rights
 		page_map(ctx,(void *)i,(void *)i,PAGING_PRESENT|PAGING_USER);
 	}
+	//map the pagedirectory to this virtual address
+	page_map(ctx,(void *)VMM_PAGEDIR,ctx->directory,PAGING_PRESENT);
 }
 
 void paging_context_create(struct page_context *ctx)
@@ -68,8 +83,9 @@ void paging_context_create(struct page_context *ctx)
 	{
 		ctx->directory[i]=0;
 	}
-	page_map(ctx,(void *)ctx,(void *)ctx,PAGING_PRESENT|PAGING_WRITE);
-	page_map(ctx,(void *)ctx->directory,(void *)ctx->directory,PAGING_PRESENT|PAGING_WRITE);
+	page_map(ctx,ctx,ctx,PAGING_PRESENT|PAGING_WRITE);
+	page_map(ctx,ctx->directory,ctx->directory,PAGING_PRESENT|PAGING_WRITE);
+	page_map(ctx,(void *)VMM_PAGEDIR,ctx->directory,PAGING_PRESENT|PAGING_WRITE);
 	page_map_kernel(ctx);
 }
 
@@ -84,5 +100,7 @@ void paging_init(void)
 	asm volatile("mov %%cr0, %0" : "=r" (cr0));
 	cr0 |= (1 << 31);
 	asm volatile("mov %0, %%cr0" : : "r" (cr0));
+
+	active=1;
 }
 
