@@ -74,9 +74,11 @@ struct idt_desc
 /*
 	paging
 */
+#define VMM_PAGEDIR (((uint32_t)(0x400*0x400*0x400-0x400*0x400))*0x4)
 
-#define PAGING_PT_PRESENT		0x01
-#define PAGING_PT_WRITE			0x02
+#define PAGING_PRESENT		0x01
+#define PAGING_WRITE		0x02
+#define PAGING_USER			0x04
 
 typedef uint32_t page_t;
 typedef page_t *page_table_t;
@@ -84,7 +86,7 @@ typedef page_table_t *page_directory_t;
 
 struct page_context
 {
-	page_directory_t directory;
+	page_table_t directory[1024];
 };
 
 /*
@@ -116,6 +118,7 @@ struct cpu_state
 struct task
 {
 	struct task *next;
+	struct page_context context;
 	uint32_t pid;
 	struct cpu_state *cpu;
 };
