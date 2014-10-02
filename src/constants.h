@@ -86,7 +86,7 @@ typedef page_table_t *page_directory_t;
 
 struct page_context
 {
-	page_table_t directory[1024];
+	page_directory_t directory;
 };
 
 /*
