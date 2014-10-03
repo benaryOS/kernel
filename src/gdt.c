@@ -1,5 +1,3 @@
-#include <constants.h>
-
 /*
  * Copyright 2014 benaryorg (benaryorg@benaryos.org)
  *
@@ -19,6 +17,8 @@
  * along with benaryOS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <constants.h>
 
 static uint32_t tss[32]={0,0,0x10};
 

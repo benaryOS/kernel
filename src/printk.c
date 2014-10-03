@@ -1,5 +1,3 @@
-#include <constants.h>
-
 /*
  * Copyright 2014 benaryorg (benaryorg@benaryos.org)
  *
@@ -19,6 +17,8 @@
  * along with benaryOS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <constants.h>
 
 extern int putchar(int);
 extern size_t strlen(const char *);

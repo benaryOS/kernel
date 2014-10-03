@@ -1,6 +1,3 @@
-#ifndef __BENARYOS_CONSTANTS__
-#define __BENARYOS_CONSTANTS__
-
 /*
  * Copyright 2014 benaryorg (benaryorg@benaryos.org)
  *
@@ -20,6 +17,9 @@
  * along with benaryOS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+#ifndef __BENARYOS_CONSTANTS__
+#define __BENARYOS_CONSTANTS__
 
 /*
 	typedefs
