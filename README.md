@@ -39,8 +39,5 @@ Either use grub (see the iso) or boot the iso from a USB/CDROM.
 
 # License
 
-At the moment none. This means it is proprietary, but thats just
-until I have time to find a fitting license.
-
-For short: Just do whatever you want, as long as the name is
-the same.
+benaryOS is using the GPL (http://www.gnu.org/licenses/).
+See LICENSE file or file headers.
