@@ -72,6 +72,7 @@ void page_map(struct page_context *ctx,void *virtp,void *physp,uint32_t flags)
 		i|=PAGING_PRESENT|PAGING_WRITE;
 		dir[pdoff]=(page_table_t)i;
 	}
+	page_unmap_tmp();
 	//map the address we have to access, to the tmp-page
 	page_table_t table=page_map_tmp((void *)(i&(~0xfff)));
 
@@ -150,6 +151,8 @@ void paging_context_create(struct page_context *ctx)
 		//set everything to zero
 		ctx->directory[i]=0;
 	}
+	//clean up
+	page_unmap_tmp();
 	//be able to access the context from within the process
 	page_map(ctx,ctx,ctx,PAGING_PRESENT|PAGING_WRITE);
 	//map the pagedirectory to this virtual address
@@ -175,7 +178,6 @@ void paging_init(void)
 
 	active=1;
 
-	*((char *)kernel_ctx->directory)=0;
 	while(1);
 }
 
