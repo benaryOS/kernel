@@ -127,20 +127,23 @@ void page_map_kernel(struct page_context *ctx)
 		//FIXME: no user rights
 		page_map(ctx,(void *)i,(void *)i,PAGING_PRESENT|PAGING_USER);
 	}
-	//map the pagedirectory to this virtual address
-	page_map(ctx,(void *)PAGEDIR,ctx->directory,PAGING_PRESENT);
 }
 
 void paging_context_create(struct page_context *ctx)
 {
 	int i;
-	ctx->directory=ctx->phys=pmm_alloc_block();
+	//get temporary access
+	ctx->directory=page_map_tmp(ctx->phys=pmm_alloc_block());
 	for(i=0;i<0x400;i++)
 	{
+		//set everything to zero
 		ctx->directory[i]=0;
 	}
+	//be able to access the context from within the process
 	page_map(ctx,ctx,ctx,PAGING_PRESENT|PAGING_WRITE);
-	page_map(ctx,(void *)PAGEDIR,ctx->directory,PAGING_PRESENT|PAGING_WRITE);
+	//map the pagedirectory to this virtual address
+	page_map(ctx,(void *)PAGEDIR,ctx->phys,PAGING_PRESENT|PAGING_WRITE);
+	//map the kernel
 	page_map_kernel(ctx);
 }
 
