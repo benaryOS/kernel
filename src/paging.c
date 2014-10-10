@@ -156,8 +156,11 @@ void paging_context_create(struct page_context *ctx)
 
 void paging_init(void)
 {
+	//physical allocation is okay. we have no paging yet
 	kernel_ctx=pmm_alloc_block();
+	//create the context (in the empty space)
 	paging_context_create(kernel_ctx);
+	//activate the context
 	paging_context_activate(kernel_ctx);
 	//kernel_ctx=(void *)PAGEDIR;
 
