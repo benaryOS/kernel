@@ -72,20 +72,27 @@ void page_map(struct page_context *ctx,void *virtp,void *physp,uint32_t flags)
 		i|=PAGING_PRESENT|PAGING_WRITE;
 		dir[pdoff]=(page_table_t)i;
 	}
-	//TODO: we are accessing physical memory
+	//map the address we have to access, to the tmp-page
 	page_table_t table=page_map_tmp((void *)(i&(~0xfff)));
 
+	//temporary var
 	i=(uint32_t)table[ptoff];
+	//if the page exists
 	if(i&PAGING_PRESENT&&flags&1&&virt!=PAGETMP)
 	{
+		//warn the user
 		printk("page already mapped\n");
-		return;
+		//return; but do not exit
 	}
+	//set content of page
 	page_t page=(page_t)(phys|(flags&0xfff));
+	//set page in page table
 	table[ptoff]=page;
 
+	//just to be clean
 	page_unmap_tmp();
 
+	//invalidate the page (CPU caches)
 	asm volatile("invlpg %0" : : "m" (*(char *)virtp));
 }
 
