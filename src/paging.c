@@ -60,7 +60,7 @@ void page_map(struct page_context *ctx,void *virtp,void *physp,uint32_t flags)
 	uint32_t i;
 
 	//get the directory
-	page_directory_t dir=page_map_tmp(ctx->directory);
+	page_directory_t dir=page_map_tmp(ctx->phys);
 
 	//temporary var
 	i=(uint32_t)dir[pdoff];
@@ -105,8 +105,10 @@ void *page_map_tmp(void *addr)
 		return addr;
 	}
 
+	//help context
+	struct page_context ctx={(void *)PAGEDIR,(void *)PAGEDIR};
 	//map the address to PAGETMP
-	page_map((void *)PAGEDIR,(void *)PAGETMP,addr,PAGING_PRESENT|PAGING_WRITE);
+	page_map(&ctx,(void *)PAGETMP,addr,PAGING_PRESENT|PAGING_WRITE);
 
 	//return the address
 	return (void *)PAGETMP;
@@ -121,8 +123,10 @@ void page_unmap_tmp(void)
 		return;
 	}
 
+	//help context
+	struct page_context ctx={(void *)PAGEDIR,(void *)PAGEDIR};
 	//map nothing (with no present-flag) to PAGETMP
-	page_map((void *)PAGEDIR,(void *)PAGETMP,0,0);
+	page_map(&ctx,(void *)PAGETMP,0,0);
 }
 
 void page_map_kernel(struct page_context *ctx)
@@ -170,5 +174,8 @@ void paging_init(void)
 	asm volatile("mov %0, %%cr0" : : "r" (cr0));
 
 	active=1;
+
+	*((char *)kernel_ctx->directory)=0;
+	while(1);
 }
 
