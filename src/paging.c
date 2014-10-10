@@ -29,6 +29,9 @@ static struct page_context *kernel_ctx;
 
 static int active=0;
 
+void *page_map_tmp(void *);
+void page_unmap_tmp(void);
+
 void paging_context_activate(struct page_context *ctx)
 {
 	//now start using the pagedirectory in the virtual memory (@PAGEDIR)
@@ -57,7 +60,7 @@ void page_map(struct page_context *ctx,void *virtp,void *physp,uint32_t flags)
 	uint32_t i;
 
 	//get the directory
-	page_directory_t dir=ctx->directory;
+	page_directory_t dir=page_map_tmp(ctx->directory);
 
 	//temporary var
 	i=(uint32_t)dir[pdoff];
@@ -70,7 +73,7 @@ void page_map(struct page_context *ctx,void *virtp,void *physp,uint32_t flags)
 		dir[pdoff]=(page_table_t)i;
 	}
 	//TODO: we are accessing physical memory
-	page_table_t table=(page_table_t)(i&(~0xfff));
+	page_table_t table=page_map_tmp((void *)(i&(~0xfff)));
 
 	i=(uint32_t)table[ptoff];
 	if(i&PAGING_PRESENT&&flags&1&&virt!=PAGETMP)
@@ -80,6 +83,8 @@ void page_map(struct page_context *ctx,void *virtp,void *physp,uint32_t flags)
 	}
 	page_t page=(page_t)(phys|(flags&0xfff));
 	table[ptoff]=page;
+
+	page_unmap_tmp();
 
 	asm volatile("invlpg %0" : : "m" (*(char *)virtp));
 }
