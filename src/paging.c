@@ -73,7 +73,7 @@ void page_map(struct page_context *ctx,void *virtp,void *physp,uint32_t flags)
 	page_table_t table=(page_table_t)(i&(~0xfff));
 
 	i=(uint32_t)table[ptoff];
-	if(i&PAGING_PRESENT)
+	if(i&PAGING_PRESENT&&flags&1&&virt!=PAGETMP)
 	{
 		printk("page already mapped\n");
 		return;
@@ -82,6 +82,35 @@ void page_map(struct page_context *ctx,void *virtp,void *physp,uint32_t flags)
 	table[ptoff]=page;
 
 	asm volatile("invlpg %0" : : "m" (*(char *)virtp));
+}
+
+void *page_map_tmp(void *addr)
+{
+	//paging is off
+	if(!active)
+	{
+		//use the phys address
+		return addr;
+	}
+
+	//map the address to PAGETMP
+	page_map((void *)PAGEDIR,(void *)PAGETMP,addr,PAGING_PRESENT|PAGING_WRITE);
+
+	//return the address
+	return (void *)PAGETMP;
+}
+
+void page_unmap_tmp(void)
+{
+	//paging is off
+	if(!active)
+	{
+		//nothing to unmap
+		return;
+	}
+
+	//map nothing (with no present-flag) to PAGETMP
+	page_map((void *)PAGEDIR,(void *)PAGETMP,0,0);
 }
 
 void page_map_kernel(struct page_context *ctx)
