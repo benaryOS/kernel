@@ -124,8 +124,8 @@ void page_map_kernel(struct page_context *ctx)
 	size_t i;
 	for(i=0x1000;i<0x400000;i+=0x1000)
 	{
-		//FIXME: no user rights
-		page_map(ctx,(void *)i,(void *)i,PAGING_PRESENT|PAGING_USER);
+		//map the page to the same position with rw-rights for kernel-mode
+		page_map(ctx,(void *)i,(void *)i,PAGING_PRESENT|PAGING_WRITE);
 	}
 }
 
