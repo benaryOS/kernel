@@ -35,8 +35,8 @@ void page_unmap_tmp(void);
 void paging_context_activate(struct page_context *ctx)
 {
 	//now start using the pagedirectory in the virtual memory (@PAGEDIR)
-	ctx->directory=(page_directory_t)PAGEDIR;
 	asm volatile("mov %0, %%cr3" : : "r" (ctx->phys));
+	ctx->directory=(page_directory_t)PAGEDIR;
 }
 
 void page_map(struct page_context *ctx,void *virtp,void *physp,uint32_t flags)
@@ -72,7 +72,7 @@ void page_map(struct page_context *ctx,void *virtp,void *physp,uint32_t flags)
 		i|=PAGING_PRESENT|PAGING_WRITE;
 		dir[pdoff]=(page_table_t)i;
 	}
-	page_unmap_tmp();
+	//page_unmap_tmp();
 	//map the address we have to access, to the tmp-page
 	page_table_t table=page_map_tmp((void *)(i&(~0xfff)));
 
@@ -106,10 +106,8 @@ void *page_map_tmp(void *addr)
 		return addr;
 	}
 
-	//help context
-	struct page_context ctx={(void *)PAGEDIR,(void *)PAGEDIR};
 	//map the address to PAGETMP
-	page_map(&ctx,(void *)PAGETMP,addr,PAGING_PRESENT|PAGING_WRITE);
+	((page_directory_t)PAGEDIR)[0x3ff][0xbff]=((uint32_t)addr)|PAGING_PRESENT|PAGING_WRITE;
 
 	//return the address
 	return (void *)PAGETMP;
@@ -124,10 +122,8 @@ void page_unmap_tmp(void)
 		return;
 	}
 
-	//help context
-	struct page_context ctx={(void *)PAGEDIR,(void *)PAGEDIR};
 	//map nothing (with no present-flag) to PAGETMP
-	page_map(&ctx,(void *)PAGETMP,0,0);
+	((page_directory_t)PAGEDIR)[0x3ff][0xbff]=0;
 }
 
 void page_map_kernel(struct page_context *ctx)
@@ -146,17 +142,17 @@ void paging_context_create(struct page_context *ctx)
 	int i;
 	//get temporary access
 	ctx->directory=page_map_tmp(ctx->phys=pmm_alloc_block());
-	for(i=0;i<0x400;i++)
+	for(i=0;i<0x3fe;i++)
 	{
 		//set everything to zero
 		ctx->directory[i]=0;
 	}
+	//map the tmp-page
+	ctx->directory[i++]=(page_table_t)((uint32_t)pmm_alloc_block()|PAGING_PRESENT|PAGING_WRITE);
+	//map the pagedirectory to this virtual address
+	ctx->directory[i++]=(page_table_t)((uint32_t)ctx->phys|PAGING_PRESENT|PAGING_WRITE);
 	//clean up
 	page_unmap_tmp();
-	//be able to access the context from within the process
-	page_map(ctx,ctx,ctx,PAGING_PRESENT|PAGING_WRITE);
-	//map the pagedirectory to this virtual address
-	page_map(ctx,(void *)PAGEDIR,ctx->phys,PAGING_PRESENT|PAGING_WRITE);
 	//map the kernel
 	page_map_kernel(ctx);
 }
@@ -167,9 +163,10 @@ void paging_init(void)
 	kernel_ctx=pmm_alloc_block();
 	//create the context (in the empty space)
 	paging_context_create(kernel_ctx);
+	//make the context usable
+	page_map(kernel_ctx,kernel_ctx,kernel_ctx,PAGING_PRESENT|PAGING_WRITE);
 	//activate the context
 	paging_context_activate(kernel_ctx);
-	//kernel_ctx=(void *)PAGEDIR;
 
 	uint32_t cr0;
 	asm volatile("mov %%cr0, %0" : "=r" (cr0));
