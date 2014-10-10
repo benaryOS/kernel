@@ -177,7 +177,5 @@ void paging_init(void)
 	asm volatile("mov %0, %%cr0" : : "r" (cr0));
 
 	active=1;
-
-	while(1);
 }
 
