@@ -32,6 +32,13 @@ static int active=0;
 void *page_map_tmp(void *);
 void page_unmap_tmp(void);
 
+void *page_unflag(void *ptr)
+{
+	uint32_t i=(uint32_t)ptr;
+	i&=~0xfffu;
+	return (void *)i;
+}
+
 void paging_context_activate(struct page_context *ctx)
 {
 	//use this pagedir
