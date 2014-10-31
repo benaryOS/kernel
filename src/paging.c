@@ -34,8 +34,9 @@ void page_unmap_tmp(void);
 
 void paging_context_activate(struct page_context *ctx)
 {
-	//now start using the pagedirectory in the virtual memory (@PAGEDIR)
+	//use this pagedir
 	asm volatile("mov %0, %%cr3" : : "r" (ctx->phys));
+	//now start using the pagedirectory in the virtual memory (@PAGEDIR)
 	ctx->directory=(page_directory_t)PAGEDIR;
 }
 
@@ -64,6 +65,7 @@ void page_map(struct page_context *ctx,void *virtp,void *physp,uint32_t flags)
 
 	//temporary var
 	i=(uint32_t)dir[pdoff];
+	while(active);
 	//if the pagetable is not present
 	if(!(i&PAGING_PRESENT))
 	{
@@ -106,8 +108,14 @@ void *page_map_tmp(void *addr)
 		return addr;
 	}
 
+	//FIXME: PAGING IS DEAD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111111einself
+
 	//map the address to PAGETMP
-	((page_directory_t)PAGEDIR)[0x3ff][0xbff]=((uint32_t)addr)|PAGING_PRESENT|PAGING_WRITE;
+	//((page_table_t)((uint32_t)((page_directory_t)PAGEDIR)[0x3fe]&(~0xfffu)))[0x3ff]=((uint32_t)addr&(~0xfffu))|PAGING_PRESENT|PAGING_WRITE;
+	page_directory_t dir=(void *)PAGEDIR;
+	((page_table_t)(((uint32_t)dir[0x3ff])&~0xfffu))[0x3ff]=((uint32_t)addr|PAGING_PRESENT|PAGING_WRITE);
+
+	asm volatile("invlpg %0" : : "m" (*(char *)PAGETMP));
 
 	//return the address
 	return (void *)PAGETMP;
@@ -123,14 +131,14 @@ void page_unmap_tmp(void)
 	}
 
 	//map nothing (with no present-flag) to PAGETMP
-	((page_directory_t)PAGEDIR)[0x3ff][0xbff]=0;
+	((page_directory_t)PAGEDIR)[0x3fe][0x3ff]=0;
 }
 
 void page_map_kernel(struct page_context *ctx)
 {
 	//FIXME: this is not (only) the kernel
 	size_t i;
-	for(i=0x1000;i<0x400000;i+=0x1000)
+	for(i=0x2000;i<0x400000;i+=0x1000)
 	{
 		//map the page to the same position with rw-rights for kernel-mode
 		page_map(ctx,(void *)i,(void *)i,PAGING_PRESENT|PAGING_WRITE);
@@ -139,7 +147,7 @@ void page_map_kernel(struct page_context *ctx)
 
 void paging_context_create(struct page_context *ctx)
 {
-	int i;
+	int i,j;
 	//get temporary access
 	ctx->directory=page_map_tmp(ctx->phys=pmm_alloc_block());
 	for(i=0;i<0x3fe;i++)
@@ -147,8 +155,18 @@ void paging_context_create(struct page_context *ctx)
 		//set everything to zero
 		ctx->directory[i]=0;
 	}
+	//get the memory for a new pagetable
+	void *addr=pmm_alloc_block();
+	//map it temporarily
+	char *ptr=page_map_tmp(addr);
+	//set it to zeros
+	for(j=0;j<0x1000;j++)
+	{
+		ptr[j]=0;
+	}
+	ctx->directory=page_map_tmp(ctx->phys);
 	//map the tmp-page
-	ctx->directory[i++]=(page_table_t)((uint32_t)pmm_alloc_block()|PAGING_PRESENT|PAGING_WRITE);
+	ctx->directory[i++]=(page_table_t)((uint32_t)addr|PAGING_PRESENT|PAGING_WRITE);
 	//map the pagedirectory to this virtual address
 	ctx->directory[i++]=(page_table_t)((uint32_t)ctx->phys|PAGING_PRESENT|PAGING_WRITE);
 	//clean up
