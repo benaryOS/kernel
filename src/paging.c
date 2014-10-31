@@ -108,12 +108,7 @@ void *page_map_tmp(void *addr)
 		return addr;
 	}
 
-	//FIXME: PAGING IS DEAD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111111einself
-
-	//map the address to PAGETMP
-	//((page_table_t)((uint32_t)((page_directory_t)PAGEDIR)[0x3fe]&(~0xfffu)))[0x3ff]=((uint32_t)addr&(~0xfffu))|PAGING_PRESENT|PAGING_WRITE;
-	page_directory_t dir=(void *)PAGEDIR;
-	((page_table_t)(((uint32_t)dir[0x3ff])&~0xfffu))[0x3ff]=((uint32_t)addr|PAGING_PRESENT|PAGING_WRITE);
+	//TODO: map the address to PAGETMP
 
 	asm volatile("invlpg %0" : : "m" (*(char *)PAGETMP));
 
