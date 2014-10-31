@@ -82,7 +82,7 @@ void page_map(struct page_context *ctx,void *virtp,void *physp,uint32_t flags)
 	}
 	page_unmap_tmp();
 	//map the address we have to access, to the tmp-page
-	page_table_t table=page_map_tmp((void *)(i&(~0xfff)));
+	page_table_t table=page_map_tmp(unflag((void *)i));
 
 	//temporary var
 	i=(uint32_t)table[ptoff];
