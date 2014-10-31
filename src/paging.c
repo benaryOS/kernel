@@ -115,7 +115,7 @@ void *page_map_tmp(void *addr)
 	}
 
 	//TODO: map the address to PAGETMP
-	page_directory_t dir=addr;
+	page_directory_t dir=(void *)PAGEDIR;
 	page_table_t table=unflag(dir[0x3fe]);
 	table[0x3ff]=(uint32_t)unflag(addr)|PAGING_PRESENT|PAGING_WRITE;
 
