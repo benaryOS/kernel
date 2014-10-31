@@ -20,6 +20,9 @@
 
 #include <constants.h>
 
+extern const void KERNEL_START;
+extern const void KERNEL_END;
+
 extern void *pmm_alloc_block(void);
 extern void *vmm_alloc_block(struct page_context *);
 
@@ -147,13 +150,13 @@ void page_unmap_tmp(void)
 
 void page_map_kernel(struct page_context *ctx)
 {
-	//FIXME: this is not (only) the kernel
 	size_t i;
-	for(i=0x2000;i<0x400000;i+=0x1000)
+	for(i=(uint32_t)&KERNEL_START;i<(uint32_t)&KERNEL_START+0x1000;i+=0x1000)
 	{
 		//map the page to the same position with rw-rights for kernel-mode
 		page_map(ctx,(void *)i,(void *)i,PAGING_PRESENT|PAGING_WRITE);
 	}
+	page_map(ctx,(void *)TEXT_BUFFER,(void *)TEXT_BUFFER,PAGING_PRESENT|PAGING_WRITE);
 }
 
 void paging_context_create(struct page_context *ctx)
@@ -185,7 +188,7 @@ void paging_context_create(struct page_context *ctx)
 	page_map_kernel(ctx);
 }
 
-void paging_init(void)
+void paging_init(struct multiboot *mb)
 {
 	//physical allocation is okay. we have no paging yet
 	kernel_ctx=pmm_alloc_block();
@@ -195,6 +198,7 @@ void paging_init(void)
 	page_map(kernel_ctx,kernel_ctx,kernel_ctx,PAGING_PRESENT|PAGING_WRITE);
 	//activate the context
 	paging_context_activate(kernel_ctx);
+	//TODO: map modules
 
 	uint32_t cr0;
 	asm volatile("mov %%cr0, %0" : "=r" (cr0));
