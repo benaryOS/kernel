@@ -61,9 +61,9 @@ void page_map(struct page_context *ctx,void *virtp,void *physp,uint32_t flags)
 	}
 
 	//offset in the page directory
-	uint32_t pdoff=(virt>>22)%0x1000;
+	uint32_t pdoff=(virt>>22)%0x400;
 	//offset in the page table
-	uint32_t ptoff=(virt>>12)%0x1000;
+	uint32_t ptoff=(virt>>12)%0x400;
 
 	uint32_t i;
 
@@ -72,6 +72,7 @@ void page_map(struct page_context *ctx,void *virtp,void *physp,uint32_t flags)
 
 	//temporary var
 	i=(uint32_t)dir[pdoff];
+
 	//if the pagetable is not present
 	if(!(i&PAGING_PRESENT))
 	{
@@ -114,10 +115,14 @@ void *page_map_tmp(void *addr)
 		return addr;
 	}
 
-	//TODO: map the address to PAGETMP
+	//offset in the page directory
+	uint32_t pdoff=(PAGETMP>>22)%0x400;
+	//offset in the page table
+	uint32_t ptoff=(PAGETMP>>12)%0x400;
+
 	page_directory_t dir=(void *)PAGEDIR;
-	page_table_t table=unflag(dir[0x3fe]);
-	table[0x3ff]=(uint32_t)unflag(addr)|PAGING_PRESENT|PAGING_WRITE;
+	page_table_t table=unflag(dir[pdoff]);
+	table[ptoff]=(uint32_t)unflag(addr)|PAGING_PRESENT|PAGING_WRITE;
 
 	asm volatile("invlpg %0" : : "m" (*(char *)PAGETMP));
 
@@ -135,9 +140,9 @@ void page_unmap_tmp(void)
 	}
 
 	//map nothing (with no present-flag) to PAGETMP
-	page_directory_t dir=(void *)PAGEDIR;
-	page_table_t table=unflag(dir[0x3fe]);
-	table[0x3ff]=0;
+	//page_directory_t dir=(void *)PAGEDIR;
+	//page_table_t table=unflag(dir[0x3fe]);
+	//table[0x3ff]=0;
 }
 
 void page_map_kernel(struct page_context *ctx)
@@ -199,6 +204,6 @@ void paging_init(void)
 
 	active=1;
 
-	page_map(kernel_ctx,(void *)0x1000,(void *)0x1000,PAGING_PRESENT|PAGING_WRITE);
+	*(int *)page_map_tmp((void *)0x1000)=0;
 }
 
