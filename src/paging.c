@@ -135,7 +135,9 @@ void page_unmap_tmp(void)
 	}
 
 	//map nothing (with no present-flag) to PAGETMP
-	((page_directory_t)PAGEDIR)[0x3fe][0x3ff]=0;
+	page_directory_t dir=(void *)PAGEDIR;
+	page_table_t table=unflag(dir[0x3fe]);
+	table[0x3ff]=0;
 }
 
 void page_map_kernel(struct page_context *ctx)
