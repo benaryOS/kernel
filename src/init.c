@@ -25,11 +25,11 @@ extern int putchar(int);
 extern size_t text_pos;
 
 extern void modules_init(struct multiboot *);
-extern void paging_init(void);
 extern void gdt_init(void);
 extern void pic_init(void);
 extern void pit_init(int);
 extern void idt_init(void);
+extern void paging_init(struct multiboot *);
 extern void pmm_init(struct multiboot *);
 
 extern struct task *task_create_kernel(void *);
@@ -75,7 +75,7 @@ void init(struct multiboot *mb)
 
 	//Paging
 	printk("initialise Paging\n");
-	paging_init();
+	paging_init(mb);
 
 	//Modules
 	printk("loading modules(%d)\n",mb->mbs_mods_count);
