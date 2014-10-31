@@ -32,7 +32,7 @@ static int active=0;
 void *page_map_tmp(void *);
 void page_unmap_tmp(void);
 
-void *page_unflag(void *ptr)
+static void *unflag(void *ptr)
 {
 	uint32_t i=(uint32_t)ptr;
 	i&=~0xfffu;
@@ -117,8 +117,8 @@ void *page_map_tmp(void *addr)
 
 	//TODO: map the address to PAGETMP
 	page_directory_t dir=addr;
-	page_table_t table=page_unflag(dir[0x3fe]);
-	table[0x3ff]=(uint32_t)page_unflag(addr)|PAGING_PRESENT|PAGING_WRITE;
+	page_table_t table=unflag(dir[0x3fe]);
+	table[0x3ff]=(uint32_t)unflag(addr)|PAGING_PRESENT|PAGING_WRITE;
 
 	asm volatile("invlpg %0" : : "m" (*(char *)PAGETMP));
 
