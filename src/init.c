@@ -57,14 +57,6 @@ void init(struct multiboot *mb)
 	printk("initialise PMM\n");
 	pmm_init(mb);
 
-	//Paging
-	printk("initialise Paging\n");
-	paging_init();
-
-	//Modules
-	printk("loading modules(%d)\n",mb->mbs_mods_count);
-	modules_init(mb);
-
 	//Global Descriptor Table
 	printk("loading GDT\n");
 	gdt_init();
@@ -80,6 +72,14 @@ void init(struct multiboot *mb)
 	//Interrupt Descriptor Table
 	printk("initialise IDT\n");
 	idt_init();
+
+	//Paging
+	printk("initialise Paging\n");
+	paging_init();
+
+	//Modules
+	printk("loading modules(%d)\n",mb->mbs_mods_count);
+	modules_init(mb);
 
 	printk("benaryOS running\n");
 	printk("starting first task now\n");
