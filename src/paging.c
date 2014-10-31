@@ -50,9 +50,9 @@ void page_map(struct page_context *ctx,void *virtp,void *physp,uint32_t flags)
 	}
 
 	//offset in the page directory
-	uint32_t pdoff=(virt>>22)%0x1000;
+	uint32_t pdoff=(virt>>22)%0x400;
 	//offset in the page table
-	uint32_t ptoff=(virt>>12)%0x1000;
+	uint32_t ptoff=(virt>>12)%0x400;
 
 	uint32_t i;
 
