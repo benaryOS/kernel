@@ -166,6 +166,8 @@ void paging_context_create(struct page_context *ctx)
 		//set everything to zero
 		ctx->directory[i]=0;
 	}
+	//clean up
+	page_unmap_tmp();
 	//get the memory for a new pagetable
 	void *addr=pmm_alloc_block();
 	//map it temporarily
@@ -175,13 +177,10 @@ void paging_context_create(struct page_context *ctx)
 	{
 		ptr[j]=0;
 	}
-	ctx->directory=page_map_tmp(ctx->phys);
 	//map the tmp-page
-	ctx->directory[i++]=(page_table_t)((uint32_t)addr|PAGING_PRESENT|PAGING_WRITE);
+	page_map(ctx,(void *)PAGETMP,(void *)addr,PAGING_PRESENT|PAGING_WRITE);
 	//map the pagedirectory to this virtual address
-	ctx->directory[i++]=(page_table_t)((uint32_t)ctx->phys|PAGING_PRESENT|PAGING_WRITE);
-	//clean up
-	page_unmap_tmp();
+	page_map(ctx,(void *)PAGEDIR,(void *)ctx->phys,PAGING_PRESENT|PAGING_WRITE);
 	//map the kernel
 	page_map_kernel(ctx);
 }
@@ -203,7 +202,5 @@ void paging_init(void)
 	asm volatile("mov %0, %%cr0" : : "r" (cr0));
 
 	active=1;
-
-	*(int *)page_map_tmp((void *)0x1000)=0;
 }
 
