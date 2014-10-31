@@ -23,9 +23,7 @@
 extern void *pmm_alloc_block(void);
 extern void page_map(struct page_context *,void *,void *,uint32_t);
 
-extern size_t printk(const char *,...);
-
-void *vmm_alloc_block(struct page_context *ctx)
+void *vmm_alloc_block(struct page_context *ctx,int user)
 {
 	page_directory_t dir=ctx->directory;
 	uint32_t i,j;
@@ -38,10 +36,20 @@ void *vmm_alloc_block(struct page_context *ctx)
 			{
 				uint32_t res=(i*0x400+j)*0x1000;
 				void *ptr=pmm_alloc_block();
-				page_map(ctx,(void *)res,ptr,PAGING_PRESENT|PAGING_WRITE|PAGING_USER);
+				page_map(ctx,(void *)res,ptr,PAGING_PRESENT|PAGING_WRITE|(user?PAGING_USER:0));
 				return (void *)res;
 			}
 		}
 	}
 	return 0;
+}
+
+void *vmm_alloc_block_user(struct page_context *ctx)
+{
+	return vmm_alloc_block(ctx,1);
+}
+
+void *vmm_alloc_block_kernel(struct page_context *ctx)
+{
+	return vmm_alloc_block(ctx,0);
 }
