@@ -72,7 +72,6 @@ void page_map(struct page_context *ctx,void *virtp,void *physp,uint32_t flags)
 
 	//temporary var
 	i=(uint32_t)dir[pdoff];
-	while(active);
 	//if the pagetable is not present
 	if(!(i&PAGING_PRESENT))
 	{
