@@ -94,7 +94,7 @@ struct idt_desc
 /*
 	paging
 */
-#define PAGEDIR (((uint32_t)(0x400*0x400*0x400-0x400*0x400))*0x4)
+#define PAGEDIR ((uint32_t)0x3ff*0x400*0x1000)
 #define PAGETMP (PAGEDIR-0x1000)
 
 #define PAGING_PRESENT		0x01
