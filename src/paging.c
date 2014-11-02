@@ -198,7 +198,19 @@ void paging_init(struct multiboot *mb)
 	page_map(kernel_ctx,kernel_ctx,kernel_ctx,PAGING_PRESENT|PAGING_WRITE);
 	//activate the context
 	paging_context_activate(kernel_ctx);
-	//TODO: map modules
+
+	//map the multiboot record
+	page_map(kernel_ctx,unflag(mb),unflag(mb),PAGING_PRESENT);
+	//map the modules
+	uint32_t i,j;
+	struct mb_module *modules=mb->mbs_mods_addr;
+	for(i=0;i<mb->mbs_mods_count;i++)
+	{
+		for(j=(uint32_t)unflag(modules[i].start);j<(uint32_t)modules[i].end+0x1000;j+=0x1000)
+		{
+			page_map(kernel_ctx,(void *)j,(void *)j,PAGING_PRESENT);
+		}
+	}
 
 	uint32_t cr0;
 	asm volatile("mov %%cr0, %0" : "=r" (cr0));
