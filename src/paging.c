@@ -203,9 +203,12 @@ void paging_init(struct multiboot *mb)
 	page_map(kernel_ctx,unflag(mb),unflag(mb),PAGING_PRESENT);
 	//map the modules
 	uint32_t i,j;
+	//map this single module
 	struct mb_module *modules=mb->mbs_mods_addr;
+	page_map(kernel_ctx,unflag(modules),unflag(modules),PAGING_PRESENT);
 	for(i=0;i<mb->mbs_mods_count;i++)
 	{
+		//and its code
 		for(j=(uint32_t)unflag(modules[i].start);j<(uint32_t)modules[i].end+0x1000;j+=0x1000)
 		{
 			page_map(kernel_ctx,(void *)j,(void *)j,PAGING_PRESENT);
