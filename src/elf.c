@@ -38,17 +38,22 @@ void elf_load(void *elf,size_t length)
 		return;
 	}
 	struct elf_header_program *pheader=(struct elf_header_program *)(((char *)elf)+header->ph_offset);
+	//TODO:create a task
+	//TODO:use the tasks page_context
 	size_t i,j;
+	//FIXME:i not used
 	for(i=0;i<header->ph_entry_count;i++)
 	{
 		void *dst=(void *)pheader->virt_addr;
 		void *src=(void *)(((char *)elf)+pheader->offset);
+		//TODO: copy without pagefault
 		if(pheader->type==1)
 		{
 			for(j=0;j<pheader->mem_size;j++)
 			{
 				((char *)dst)[j]=0;
 			}
+			//FIXME:place this somewhere useful
 			if(pheader->file_size+((char *)src)>(char *)end)
 			{
 				printk("corrupt elf\n");
@@ -56,6 +61,9 @@ void elf_load(void *elf,size_t length)
 			memcpy(dst,src,pheader->file_size);
 		}
 	}
+	//TODO:create the task with the context
 	struct task *t=task_create_kernel((void *)header->entry);
+	//FIXME:maybe we should return the task * to create the context outside this function
+	//FIXME:so we can reuse this function to build userspace processes later
 	task_add(t);
 }
