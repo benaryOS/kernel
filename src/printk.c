@@ -22,7 +22,7 @@
 
 extern int putchar(int);
 extern size_t strlen(const char *);
-extern void com(uint8_t);
+
 
 size_t printint(int i)
 {
@@ -100,7 +100,6 @@ int printk(const char *format,...)
 				break;
 			default:
 				putchar(format[i]);
-				com(format[i]);
 				len++;
 				break;
 		}
