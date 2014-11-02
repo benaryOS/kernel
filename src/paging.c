@@ -151,7 +151,7 @@ void page_unmap_tmp(void)
 void page_map_kernel(struct page_context *ctx)
 {
 	size_t i;
-	for(i=(uint32_t)&KERNEL_START;i<(uint32_t)&KERNEL_START+0x1000;i+=0x1000)
+	for(i=(uint32_t)&KERNEL_START;i<(uint32_t)&KERNEL_END+0x1000;i+=0x1000)
 	{
 		//map the page to the same position with rw-rights for kernel-mode
 		page_map(ctx,(void *)i,(void *)i,PAGING_PRESENT|PAGING_WRITE);
