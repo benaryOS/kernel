@@ -194,8 +194,6 @@ void paging_init(struct multiboot *mb)
 	kernel_ctx=pmm_alloc_block();
 	//create the context (in the empty space)
 	paging_context_create(kernel_ctx);
-	//make the context usable
-	page_map(kernel_ctx,kernel_ctx,kernel_ctx,PAGING_PRESENT|PAGING_WRITE);
 	//activate the context
 	paging_context_activate(kernel_ctx);
 
@@ -205,7 +203,6 @@ void paging_init(struct multiboot *mb)
 	uint32_t i,j;
 	//map this single module
 	struct mb_module *modules=mb->mbs_mods_addr;
-	page_map(kernel_ctx,unflag(modules),unflag(modules),PAGING_PRESENT);
 	for(i=0;i<mb->mbs_mods_count;i++)
 	{
 		//and its code
