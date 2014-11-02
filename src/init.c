@@ -40,9 +40,9 @@ extern void task_add(struct task *);
 void init(struct multiboot *mb)
 {
 	size_t i;
-	for(i=0;i<TEXT_HEIGHT*TEXT_WIDTH;i++)
+	for(i=0;i<TEXT_HEIGHT*TEXT_WIDTH*2;i++)
 	{
-		putchar(' ');
+		*(((char *)TEXT_BUFFER)+i)=0;
 	}
 	text_pos=0;
 	
