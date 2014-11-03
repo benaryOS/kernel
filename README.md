@@ -22,7 +22,12 @@ You can boot the kernel using the following options.
 ### QEMU
 
 Just run `qemu -kernel kernel`.
-Or if you want the serial-output to be logged to file.log run `qemu -kernel kernel -serial file:file.log`
+Or if you want the serial-output to be logged to
+file.log run `qemu -kernel kernel -serial file:file.log`
+
+On Unix you can also let it write to stdout and
+read from stdin, by setting the `-serial` parameter to
+`stdio`. This would then be `qemu -kernel kernel -serial stdio`.
 
 ### ISO
 
