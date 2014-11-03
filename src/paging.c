@@ -142,10 +142,17 @@ void page_unmap_tmp(void)
 		return;
 	}
 
+	//offset in the page directory
+	uint32_t pdoff=(PAGETMP>>22)%0x400;
+	//offset in the page table
+	uint32_t ptoff=(PAGETMP>>12)%0x400;
+
 	//map nothing (with no present-flag) to PAGETMP
-	//page_directory_t dir=(void *)PAGEDIR;
-	//page_table_t table=unflag(dir[0x3fe]);
-	//table[0x3ff]=0;
+	page_directory_t dir=(void *)PAGEDIR;
+	page_table_t table=unflag(dir[pdoff]);
+	table[ptoff]=0;
+
+	asm volatile("invlpg %0" : : "m" (*(char *)PAGETMP));
 }
 
 void page_map_kernel(struct page_context *ctx)
