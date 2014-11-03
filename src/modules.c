@@ -33,8 +33,6 @@ void modules_init(struct multiboot *mb)
 {
 	if(mb->mbs_mods_count)
 	{
-		printk("Modules are currently not paging compatible, skipping\n");
-		return;
 		struct mb_module *modules=mb->mbs_mods_addr;
 		size_t i;
 		for(i=0;i<mb->mbs_mods_count;i++)
