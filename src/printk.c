@@ -23,6 +23,7 @@
 extern int putchar(int);
 extern size_t strlen(const char *);
 
+
 size_t printint(int i)
 {
 	if(!i)
