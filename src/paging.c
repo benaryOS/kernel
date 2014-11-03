@@ -161,10 +161,10 @@ void page_map_kernel(struct page_context *ctx)
 
 void paging_context_create(struct page_context *ctx)
 {
-	int i,j;
+	int i;
 	//get temporary access
 	ctx->directory=page_map_tmp(ctx->phys=pmm_alloc_block());
-	for(i=0;i<0x3fe;i++)
+	for(i=0;i<0x400;i++)
 	{
 		//set everything to zero
 		ctx->directory[i]=0;
@@ -176,9 +176,9 @@ void paging_context_create(struct page_context *ctx)
 	//map it temporarily
 	char *ptr=page_map_tmp(addr);
 	//set it to zeros
-	for(j=0;j<0x1000;j++)
+	for(i=0;i<0x1000;i++)
 	{
-		ptr[j]=0;
+		ptr[i]=0;
 	}
 	//map the tmp-page
 	page_map(ctx,(void *)PAGETMP,(void *)addr,PAGING_PRESENT|PAGING_WRITE);
