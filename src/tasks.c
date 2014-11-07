@@ -22,6 +22,10 @@
 
 extern void *pmm_alloc_block(void);
 extern uint32_t pid_get(void);
+extern void *vmm_alloc_block_kernel(struct page_context *);
+extern void *virt_to_phys(struct page_context *,void *);
+extern void *page_map_tmp(void *);
+extern void page_unmap_tmp(void);
 
 void task_create_cpu(struct cpu_state *dst,void *entry)
 {
@@ -43,29 +47,37 @@ void task_create_cpu(struct cpu_state *dst,void *entry)
 	*dst=cpu;
 }
 
-struct task *task_create_kernel(void *entry)
+struct task *task_create_kernel(struct page_context *ctx,void *entry)
 {
-	struct task *task=(struct task *)pmm_alloc_block();
-	task->pid=pid_get();
-	char *stack=(char *)pmm_alloc_block();
-	struct cpu_state *state=(struct cpu_state *)(stack+4096-sizeof(struct cpu_state));
+	char *stack=(char *)vmm_alloc_block_kernel(ctx);
+	char *stack_mapped=page_map_tmp(virt_to_phys(ctx,stack));
+	struct cpu_state *state=(struct cpu_state *)(stack_mapped+4096-sizeof(struct cpu_state));
 	task_create_cpu(state,entry);
 	state->cs=0x08;
-	task->cpu=state;
+	page_unmap_tmp();
+	struct task *task=(struct task *)vmm_alloc_block_kernel(ctx);
+	struct task *task_mapped=page_map_tmp(virt_to_phys(ctx,task));
+	task_mapped->cpu=state;
+	task_mapped->pid=pid_get();
+	page_unmap_tmp();
 	return task;
 }
 
-struct task *task_create_user(void *entry)
+struct task *task_create_user(struct page_context *ctx,void *entry)
 {
-	struct task *task=(struct task *)pmm_alloc_block();
-	task->pid=pid_get();
-	char *stack=(char *)pmm_alloc_block();
-	struct cpu_state *state=(struct cpu_state *)(stack+4096-sizeof(struct cpu_state));
+	char *stack=(char *)vmm_alloc_block_kernel(ctx);
+	char *stack_mapped=page_map_tmp(virt_to_phys(ctx,stack));
+	struct cpu_state *state=(struct cpu_state *)(stack_mapped+4096-sizeof(struct cpu_state));
 	task_create_cpu(state,entry);
 	state->cs=0x18|0x03;
 	state->ss=0x20|0x03;
-	state->esp=(uint32_t)(((char *)pmm_alloc_block())+4096);
-	task->cpu=state;
+	state->esp=(uint32_t)(((char *)vmm_alloc_block_user(ctx))+4096);
+	page_unmap_tmp();
+	struct task *task=(struct task *)vmm_alloc_block_kernel(ctx);
+	struct task *task_mapped=page_map_tmp(virt_to_phys(ctx,task));
+	task_mapped->cpu=state;
+	task_mapped->pid=pid_get();
+	page_unmap_tmp();
 	return task;
 }
 
