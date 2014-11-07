@@ -24,21 +24,31 @@ extern size_t printk(const char *,...);
 extern void *memcpy(void *,void *,size_t);
 
 extern struct task *task_create_kernel(void *);
-extern void task_add(struct task *);
 
-void elf_load(void *elf,size_t length)
+void elf_load(struct task **task,void *elf,size_t length)
 {
+	//get the end
 	void *end=((char *)elf)+length;
 
+	//get the elf header
 	struct elf_header *header=(struct elf_header *)elf;
+
+	//create the task (contains the page_context)
+	*task=task_create_kernel((void *)header->entry);
+
 	//FIXME: if(header->magic!=ELF_MAGIC) does not work on some systems
 	if(0)
 	{
 		printk("broken elf magic\n");
 		return;
 	}
+
+	//get the array of elf-headers
 	struct elf_header_program *pheader=(struct elf_header_program *)(((char *)elf)+header->ph_offset);
-	//TODO:create a task
+
+	//until everythings working correctly, return
+	return;
+
 	//TODO:use the tasks page_context
 	size_t i,j;
 	//FIXME:i not used
@@ -65,5 +75,5 @@ void elf_load(void *elf,size_t length)
 	struct task *t=task_create_kernel((void *)header->entry);
 	//FIXME:maybe we should return the task * to create the context outside this function
 	//FIXME:so we can reuse this function to build userspace processes later
-	task_add(t);
+	//task_add(t);
 }
