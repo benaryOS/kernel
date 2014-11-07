@@ -27,7 +27,7 @@ extern void *memcpy(void *,void *,size_t);
 extern struct task *task_create_kernel(void *);
 extern void task_add(struct task *);
 
-void elf_load(void *,size_t);
+void elf_load(struct task **,void *,size_t);
 
 void modules_init(struct multiboot *mb)
 {
@@ -37,7 +37,9 @@ void modules_init(struct multiboot *mb)
 		size_t i;
 		for(i=0;i<mb->mbs_mods_count;i++)
 		{
-			elf_load(modules[i].start,modules[i].end-modules[i].start);
+			struct task *t;
+			elf_load(&t,modules[i].start,modules[i].end-modules[i].start);
+			//TODO: add task
 		}
 	}
 }
