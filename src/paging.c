@@ -42,6 +42,32 @@ static void *unflag(void *ptr)
 	return (void *)i;
 }
 
+uint32_t getphys(struct page_context *ctx,void *ptr)
+{
+	//this is a quick 'n' dirty copy of page_map
+	//for comments have a look @page_map
+	uint32_t virt=(uint32_t)ptr;
+	virt&=~0xfff;
+	uint32_t pdoff=(virt>>22)%0x400;
+	uint32_t ptoff=(virt>>12)%0x400;
+	page_directory_t dir=page_map_tmp(ctx->phys);
+	if(!((uint32_t)dir[pdoff]&PAGING_PRESENT))
+	{
+		return 0;
+	}
+	page_table_t table=page_map_tmp(unflag(dir[pdoff]));
+	if(!((uint32_t)dir[pdoff]&PAGING_PRESENT))
+	{
+		return 0;
+	}
+	return table[ptoff];
+}
+
+void *virt_to_phys(struct page_context *ctx,void *ptr)
+{
+	return unflag((void *)getphys(ctx,ptr));
+}
+
 void paging_context_activate(struct page_context *ctx)
 {
 	//use this pagedir
