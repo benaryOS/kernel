@@ -23,6 +23,7 @@
 extern void *pmm_alloc_block(void);
 extern uint32_t pid_get(void);
 extern void *vmm_alloc_block_kernel(struct page_context *);
+extern void *vmm_alloc_block_user(struct page_context *);
 extern void *virt_to_phys(struct page_context *,void *);
 extern void *page_map_tmp(void *);
 extern void page_unmap_tmp(void);
