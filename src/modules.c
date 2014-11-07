@@ -39,7 +39,7 @@ void modules_init(struct multiboot *mb)
 		{
 			struct task *t;
 			elf_load(&t,modules[i].start,modules[i].end-modules[i].start);
-			//TODO: add task
+			task_add(t);
 		}
 	}
 }
