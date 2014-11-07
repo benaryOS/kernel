@@ -71,8 +71,6 @@ void elf_load(struct task **task,void *elf,size_t length)
 			memcpy(dst,src,pheader->file_size);
 		}
 	}
-	//TODO:create the task with the context
-	struct task *t=task_create_kernel((void *)header->entry);
 	//FIXME:maybe we should return the task * to create the context outside this function
 	//FIXME:so we can reuse this function to build userspace processes later
 	//task_add(t);
