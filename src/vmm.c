@@ -23,21 +23,29 @@
 extern void *pmm_alloc_block(void);
 extern void page_map(struct page_context *,void *,void *,uint32_t);
 
+extern void *page_map_tmp(void *);
+extern void page_unmap_tmp(void);
+
+extern void *paging_unflag(void *);
+
 void *vmm_alloc_block(struct page_context *ctx,int user)
 {
-	page_directory_t dir=ctx->directory;
+	page_directory_t dir=page_map_tmp(ctx?ctx->directory:(void *)PAGEDIR);
 	uint32_t i,j;
 	for(i=0x100;i<0x400;i++)
 	{
-		page_table_t table=dir[i];
-		if(!(((uint32_t)table)&PAGING_PRESENT))
+		if((uint32_t)dir[i]&PAGING_PRESENT)
 		{
+			page_table_t table=page_map_tmp(paging_unflag(dir[i]));
 			for(j=1;j<0x400;j++)
 			{
-				uint32_t res=(i*0x400+j)*0x1000;
-				void *ptr=pmm_alloc_block();
-				page_map(ctx,(void *)res,ptr,PAGING_PRESENT|PAGING_WRITE|(user?PAGING_USER:0));
-				return (void *)res;
+				if(!(table[i]&PAGING_PRESENT))
+				{
+					uint32_t res=(i*0x400+j)*0x1000;
+					void *ptr=pmm_alloc_block();
+					page_map(ctx,(void *)res,ptr,PAGING_PRESENT|PAGING_WRITE|(user?PAGING_USER:0));
+					return (void *)res;
+				}
 			}
 		}
 	}
