@@ -20,6 +20,8 @@
 
 #include <constants.h>
 
+#define unflag(x) paging_unflag(x)
+
 extern const void KERNEL_START;
 extern const void KERNEL_END;
 
@@ -35,7 +37,7 @@ static int active=0;
 void *page_map_tmp(void *);
 void page_unmap_tmp(void);
 
-static void *unflag(void *ptr)
+void *paging_unflag(void *ptr)
 {
 	uint32_t i=(uint32_t)ptr;
 	i&=~0xfffu;
