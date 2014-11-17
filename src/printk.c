@@ -23,31 +23,39 @@
 extern int putchar(int);
 extern size_t strlen(const char *);
 
-
-size_t printint(int i)
+size_t print_base(uint32_t n,int base)
 {
-	if(!i)
+	static const char *digits="0123456789abcdefghijklmnopqrstuvwxyz";
+	int count=0;
+	int sign=base<0;
+	if(sign)
+	{
+		base=-base;
+	}
+	if(base<2||base>=38)
+	{
+		return count;
+	}
+	if(sign&&((int)n)<0)
+	{
+		n=-(int)n;
+		putchar('-');
+		count++;
+	}
+	if(!n)
 	{
 		putchar('0');
-		return 1;
+		count++;
+		return count;
 	}
-	if(i<0)
+	uint32_t nbase;
+	for(nbase=1;nbase<=(sign?(int)n:n)/base;nbase*=base);
+	do
 	{
-		putchar('-');
-		return printint(-i)+1;
-	}
-	int j,k;
-	for(k=j=0;i;i/=10,k++)
-	{
-		j*=10;
-		j+=i%10;
-	}
-	for(i=0;i<k;i++)
-	{
-		putchar('0'+(j%10));
-		j/=10;
-	}
-	return (size_t)i;
+		putchar(digits[(n/nbase)%base]);
+		count++;
+	}while(nbase/=base);
+	return count;
 }
 
 int printk(const char *format,...)
@@ -67,7 +75,17 @@ int printk(const char *format,...)
 				{
 					case 'd':
 					{
-						len+=printint(va_arg(args,int));
+						len+=print_base(va_arg(args,int),-10);
+						break;
+					}
+					case 'u':
+					{
+						len+=print_base(va_arg(args,int),10);
+						break;
+					}
+					case 'x':
+					{
+						len+=print_base(va_arg(args,int),16);
 						break;
 					}
 					case 'c':

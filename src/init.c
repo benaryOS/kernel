@@ -83,6 +83,7 @@ void init(struct multiboot *mb)
 
 	printk("benaryOS running\n");
 	printk("starting first task now\n");
+	
 	asm volatile("sti");
 
 	//this will forget our thread
