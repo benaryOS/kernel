@@ -1,9 +1,9 @@
 SRCS = $(shell find src -name '*.[cS]')
 OBJS = $(addsuffix .o,$(basename $(SRCS)))
 
-AS = as
-CC = cc
-LD = ld
+AS := as
+CC := cc
+LD := ld
 
 ASFLAGS	= -m32
 CFLAGS	= -m32 -Werror -Wall -g -fno-stack-protector -nostdinc -std=gnu89 -Isrc
