@@ -1,0 +1,9 @@
+language: c
+compiler: gcc
+notifications:
+    email:
+        recipients:
+            - benaryorg@benaryos.org
+        on_success: always
+        on_failure: always
+script: make -j5
