@@ -8,6 +8,9 @@ It began as a rewrite of benarydingOS.
 
 ## Building it
 
+[![Build Status](https://travis-ci.org/benaryOS/kernel.svg?branch=master)]
+(https://travis-ci.org/benaryOS/kernel)
+
 benaryOS is using `make`:
 
 	$ make
