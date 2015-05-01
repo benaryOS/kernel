@@ -48,5 +48,8 @@ Either use grub (see the iso) or boot the iso from a USB/CDROM.
 
 # License
 
-benaryOS is using the GPL (http://www.gnu.org/licenses/).
+The rewrite is licensed using the MIT license.
 See LICENSE file or file headers.
+
+benaryOS <=v0.1 is using the GPL (http://www.gnu.org/licenses/).
+
