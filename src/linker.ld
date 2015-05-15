@@ -1,56 +1,35 @@
-/*
- * Copyright 2014 benaryorg (benaryorg@benaryos.org)
- *
- * This file is part of benaryOS.
- *
- * benaryOS is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * benaryOS is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with benaryOS.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
-
-/* set the entrypoint for the execution (_start is the assembly function from start.s) */
+/* start at our assembly function */
 ENTRY(_start)
 
-/* set positions of sections in the binary */
+/* we need 32-bit elfs even if it contains 64-bit code so it is loaded */
+OUTPUT_FORMAT(elf32-i386)
+
 SECTIONS
 {
-	/* ELFs (are executables, our kernel is one too) are loaded to 1MB) */
-	. = 0x100000;
-
+	/* place some marks */
 	KERNEL_START = .;
 
-	/* section .text (executable code) comes first */
+	/* text section */
 	.text : {
-		/* multiboot first (for grub) */
-		*(multiboot)
-		/* the rest of .text */
+		/* multiboot comes first */
+		*(.multiboot)
+		/* then the rest */
 		*(.text)
 	}
-
-	/* than data */
 	.data ALIGN(4096) : {
+		/* our data */
 		*(.data)
 	}
-
 	.rodata ALIGN(4096) : {
+		/* more data */
 		*(.rodata)
 	}
-
-	/* this is the stack */
 	.bss ALIGN(4096) : {
+		/* kernel stack */
 		*(.bss)
 	}
-
 	. = ALIGN(4096);
+	/* endmark */
 	KERNEL_END = .;
 }
+
