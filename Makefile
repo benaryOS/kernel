@@ -1,17 +1,21 @@
-SRCS = $(shell find src -name '*.[cS]')
-OBJS = $(addsuffix .o,$(basename $(SRCS)))
+SRCPATH:=src
+ 
+SRCS=$(shell find $(SRCPATH) -regextype posix-extended -regex '^.+\.(c|asm)$$')
+OBJS=$(addprefix build,$(addsuffix .o,$(basename $(SRCS:$(SRCPATH)%=%)))) 
 
-AS := as
-CC := cc
+AS := nasm
+CC := gcc
 LD := ld
 
-ASFLAGS	= -m32
-CFLAGS	= -m32 -Werror -Wall -g -fno-stack-protector -nostdinc -std=gnu89 -Isrc
-LDFLAGS	= -melf_i386 -Tsrc/linker.ld
+ASFLAGS	= -felf64
+CFLAGS	= -m64 -Werror -Wall -fno-stack-protector -nostdinc -std=gnu89 \
+	-ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2 \
+	-I$(SRCPATH)
+LDFLAGS	= -Tsrc/linker.ld -nostdlib -z max-page-size=0x1000
 
-default: all
+default: build/kernel
 
-all: build/kernel
+all: clean build/kernel
 
 build/kernel: build $(OBJS)
 	$(LD) $(LDFLAGS) -o $@ $(OBJS)
@@ -19,10 +23,19 @@ build/kernel: build $(OBJS)
 build:
 	@mkdir -p build
 
-%.o: %.s
-	$(AS) $(ASFLAGS) -c -o $@ $^
-%.o: %.c
+build/%.o: $(SRCPATH)/%.asm
+	@mkdir -p $(dir $@)
+	$(AS) $(ASFLAGS) -o $@ $^
+build/%.o: $(SRCPATH)/%.c
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c -o $@ $^
 
 clean:
 	rm -f $(OBJS)
+	rm -f build/kernel
+
+cleanall:
+	rm -rf build/
+
+.PHONY: clean cleanall
+
