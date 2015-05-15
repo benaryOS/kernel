@@ -6,10 +6,10 @@
 void clear(void)
 {
 	int i;
-	for(i=0;i<80*40;i++)
+	for(i=0;i<TEXT_WIDTH*TEXT_HEIGHT;i++)
 	{
 		//set to zero
-		*((uint16_t *)TEXTBUFFER+i)=0;
+		*((uint16_t *)TEXT+i)=0;
 	}
 }
 

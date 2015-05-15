@@ -15,7 +15,9 @@ struct mb_header
 
 /* CONSTANTS */
 
-#define TEXTBUFFER ((void *)0xb8000)
+#define TEXT ((void *)0xb8000)
+#define TEXT_WIDTH (80)
+#define TEXT_HEIGHT (40)
 
 /* FUNCTIONS */
 
