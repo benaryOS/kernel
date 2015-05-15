@@ -19,6 +19,7 @@ struct mb_header
 
 /* FUNCTIONS */
 
+void main(struct mb_header *);
 void clear(void);
 
 #endif /* HEADER */

@@ -15,16 +15,15 @@ stack_top:
 section .text
 
 ;our code
-extern clear
+extern main
 
 ;our c function
 global _start
 _start:
 	;initialise our stack
 	mov rsp,stack_top
-	;first call clear
-	call clear
-	;TODO:then start the kernel
+	;start the kernel
+	call main
 
 	;then stop
 .hlt:
