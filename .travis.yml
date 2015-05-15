@@ -6,7 +6,7 @@ notifications:
             - benaryorg@benaryos.org
         on_success: always
         on_failure: always
-script: make -j5 && timeout 10s qemu-system-x86_64 -kernel build/kernel || test $? -eq 124
+script: make -j5 && timeout 10s qemu-system-x86_64 -kernel build/kernel -nographic || test $? -eq 124
 before_install:
     - sudo apt-get update -qq
     - sudo apt-get install -y nasm qemu
