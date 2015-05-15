@@ -1,8 +1,17 @@
 #ifndef HEADER
 #define HEADER
 
+/* INCLUDES */
+
 #include <stdint.h>
 #include <stddef.h>
+
+/* DATATYPES */
+
+struct mb_header
+{
+	//TODO
+};
 
 /* CONSTANTS */
 
