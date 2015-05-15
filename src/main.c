@@ -2,5 +2,6 @@
 
 void main(struct mb_header *mb)
 {
+	clear();
 }
 
