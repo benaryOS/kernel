@@ -8,9 +8,9 @@ dd mb_check
 section .bss
 
 ;our stack
-global kernel_stack
-kernel_stack:
+stack_bot:
 	resb 16384
+stack_top:
 
 section .text
 
@@ -20,6 +20,8 @@ extern clear
 ;our c function
 global _start
 _start:
+	;initialise our stack
+	mov rsp,stack_top
 	;first call clear
 	call clear
 	;TODO:then start the kernel
