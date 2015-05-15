@@ -7,6 +7,7 @@ dd mb_check
 
 section .bss
 
+align 4
 ;our stack
 stack_bot:
 	resb 16384
@@ -26,9 +27,10 @@ _start:
 	call main
 
 	;then stop
-.hlt:
+global halt
+halt:
 	hlt
-	jmp .hlt
+	jmp halt
 
 section .data
 
