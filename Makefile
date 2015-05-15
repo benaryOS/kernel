@@ -8,9 +8,8 @@ CC := gcc
 LD := ld
 
 ASFLAGS	= -felf64
-CFLAGS	= -m64 -Werror -Wall -fno-stack-protector -nostdinc -std=gnu89 \
-	-ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2 \
-	-I$(SRCPATH)
+CFLAGS	= -m64 -Wall -fno-stack-protector -std=gnu89 -ffreestanding -mno-mmx \
+	-mno-red-zone -mcmodel=large -mno-sse -mno-sse2 -I$(SRCPATH)
 LDFLAGS	= -Tsrc/linker.ld -nostdlib -z max-page-size=0x1000
 
 default: build/kernel
