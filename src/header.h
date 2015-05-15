@@ -6,6 +6,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#include <macros.h>
+
 /* DATATYPES */
 
 struct mb_header
