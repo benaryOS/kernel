@@ -8,26 +8,22 @@ dd mb_check
 section .bss
 
 align 4
-;our stack
 stack_bot:
-	resb 16384
+	resb 16384 ;our stack
 stack_top:
 
 section .text
 
-;our code
-extern main
+extern main ;our c function
 
-;our c function
 global _start
 _start:
-	;initialise our stack
-	mov rsp,stack_top
-	;start the kernel
-	call main
+	mov rsp,stack_top	;initialise our stack
+	push rbx			;pass the multiboot header
+	call main			;start the kernel
 
-	;then stop
-global halt
+	
+global halt ;then stop
 halt:
 	hlt
 	jmp halt
