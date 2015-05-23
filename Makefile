@@ -10,8 +10,8 @@ LD := ld
 ASFLAGS	= -felf64 -g
 CFLAGS	= -m64 -Wall -Wextra -std=gnu89 -O0 -ffreestanding -mno-red-zone \
 	-mno-mmx -mno-sse -mno-sse2 -mno-sse3 -mno-3dnow -I$(SRCPATH) -g \
-	-mcmodel=large
-LDFLAGS	= -Tsrc/linker.ld -nostdlib
+	-mcmodel=kernel
+LDFLAGS	= -Tsrc/linker.ld -nostdlib -z max-page-size=0x1000
 
 default: build/kernel
 
