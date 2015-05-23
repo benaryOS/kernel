@@ -35,8 +35,8 @@ read from stdin, by setting the `-serial` parameter to
 ### ISO
 
 Soon there will be a way to create a `.iso`. For now
-you can use the scripts provided by benarydingOS
-(https://github.com/benaryorg/benarydingOS).
+you can use the scripts provided by
+[benarydingOS](https://github.com/benaryorg/benarydingOS).
 
 #### Virtualbox/VMWare
 
@@ -51,5 +51,5 @@ Either use grub (see the iso) or boot the iso from a USB/CDROM.
 The rewrite is licensed using the MIT license.
 See LICENSE file or file headers.
 
-benaryOS <=v0.1 is using the GPL (http://www.gnu.org/licenses/).
+benaryOS <=v0.1 is using the [GPL](http://www.gnu.org/licenses/).
 
