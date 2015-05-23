@@ -24,8 +24,8 @@ extern main ;our c function
 
 global _start
 _start:
-	mov esp,stack_top	;initialise our stack
-	push ebx			;pass the multiboot header
+	mov rsp,stack_top	;initialise our stack
+	push rbx			;pass the multiboot header
 	call main			;start the kernel
 	
 global halt ;then stop
