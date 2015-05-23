@@ -13,7 +13,7 @@
 
 struct mb_header
 {
-	//TODO
+	//TODO:multiboot header
 };
 
 /* CONSTANTS */
@@ -28,11 +28,12 @@ struct mb_header
 
 //main
 
-void main(struct mb_header *);
+extern void main(struct mb_header *);
 
 //textio
 
-void clear(void);
+extern void clear(void);
+extern int putchar(int);
 
 #endif /* HEADER */
 

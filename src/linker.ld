@@ -1,34 +1,37 @@
 /* start at our assembly function */
 ENTRY(_start)
 
-/* we need 32-bit elfs even if it contains 64-bit code so it is loaded */
-OUTPUT_FORMAT(elf32-i386)
-
 SECTIONS
 {
-	. = 0x100000;
+	. = 1M;
 	/* place some marks */
 	KERNEL_START = .;
 
 	/* text section */
-	.text : {
+	.text BLOCK(4K) : ALIGN(4K)
+	{
 		/* multiboot comes first */
-		*(.multiboot)
+		*(multiboot)
 		/* then the rest */
 		*(.text)
 	}
-	.data ALIGN(4096) : {
+	.data BLOCK(4K) : ALIGN(4K)
+	{
 		/* our data */
 		*(.data)
 	}
-	.rodata ALIGN(4096) : {
+	.rodata BLOCK(4K) : ALIGN(4K)
+	{
 		/* more data */
 		*(.rodata)
 	}
-	.bss ALIGN(4096) : {
+	.bss BLOCK(4K) : ALIGN(4K)
+	{
+		*(COMMON)
 		/* kernel stack */
 		*(.bss)
 	}
+
 	. = ALIGN(4096);
 	/* endmark */
 	KERNEL_END = .;

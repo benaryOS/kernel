@@ -7,10 +7,10 @@ AS := nasm
 CC := gcc
 LD := ld
 
-ASFLAGS	= -felf64 -g
-CFLAGS	= -m64 -Wall -fno-stack-protector -std=gnu89 -ffreestanding -mno-mmx \
-	-mno-red-zone -mcmodel=kernel -mno-sse -mno-sse2 -I$(SRCPATH) -g
-LDFLAGS	= -Tsrc/linker.ld -nostdlib -z max-page-size=0x1000
+ASFLAGS	= -felf32 -g
+CFLAGS	= -m32 -Wall -std=gnu89 -O0 -ffreestanding -mno-red-zone -mno-mmx \
+	-mno-sse -mno-sse2 -mno-sse3 -mno-3dnow -I$(SRCPATH) -g #-mcmodel=kernel
+LDFLAGS	= -Tsrc/linker.ld -nostdlib -melf_i386
 
 default: build/kernel
 
