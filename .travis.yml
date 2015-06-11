@@ -3,7 +3,7 @@ compiler: gcc
 notifications:
     email:
         recipients:
-            - benaryorg@benaryos.org
+            - travisci@benaryos.org
         on_success: always
         on_failure: always
 script: make -j5 && timeout 5m qemu-system-x86_64 -kernel build/kernel -display none || test $? -eq 124
