@@ -4,7 +4,7 @@ notifications:
     email:
         recipients:
             - travisci@benaryos.org
-        on_success: always
+        on_success: change
         on_failure: always
 script: make -j5 && timeout 5m qemu-system-x86_64 -kernel build/kernel -display none || test $? -eq 124
 before_install:
