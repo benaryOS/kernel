@@ -32,6 +32,7 @@ kernel: $(OBJS)
 	@printf "[%6s] %s\n" "CC" "$@" 
 	@$(CC) $(CFLAGS) -c -o $@ $^
 
+#TODO: compile libcore to not have SSE
 #TODO: add dependencies
 %.rlib:
 	@printf "[%6s] %s\n" "CARGO" "$@" 
