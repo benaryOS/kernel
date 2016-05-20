@@ -49,3 +49,4 @@ _start:
 	; try to stop cpu
 	hlt
 	jmp .hang
+
