@@ -35,7 +35,7 @@ kernel: $(OBJS)
 #TODO: add dependencies
 %.rlib:
 	@printf "[%6s] %s\n" "CARGO" "$@" 
-	@cd $(shell dirname $@) && $(CARGO) build --quiet $(CARGOFLAGS)
+	@cd $(dir $@) && $(CARGO) build --quiet $(CARGOFLAGS)
 
 clean:
 	rm -f $(OBJS)
